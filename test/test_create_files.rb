@@ -31,5 +31,11 @@ class TestCreateFiles < Test::Unit::TestCase
 		end
 	end
 	
+	def test_no_date
+		assert_raise ArgumentError do
+			CreateFiles.new('') 
+		end
+	end
+	
 	# TODO: test file creation methods
 end
