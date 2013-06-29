@@ -8,6 +8,10 @@ class TestCreateFiles < Test::Unit::TestCase
   	@cf = CreateFiles.new('20130418')   
   end
 
+	def teardown
+  	FileUtils.rm_rf('./201304')   
+  end
+  
 	def test_accessors
 		assert_equal('April 2013',@cf.invoice_month)
 		assert_equal('./201304', @cf.dir_root)

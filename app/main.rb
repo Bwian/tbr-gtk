@@ -6,49 +6,24 @@ require_relative 'call_detail'
 require_relative 'group'
 require_relative 'groups'
 require_relative 'create_files'
+require_relative 'parse_files'
 
-telstra = 'telstra.csv'
-phones = 'phones.csv'
+BILL_FILE		= 'telstra.csv'
+CONFIG_FILE	= 'config/services.csv'
+UNASSIGNED	= 'Unassigned'
+
+call_type = CallType.new
+call_type.load(BILL_FILE)
+
 services = Services.new
 groups = Groups.new
-call_type = CallType.new
-call_type.load(telstra)
 
-file = File.new(phones)
-file.each_line do |line|
-	fields = line.split(',')
-	group = groups.group(fields[1])
-	service = services.service(fields[0])
-	service.name = fields[2]
-	service.cost_centre = fields[3]
-	group.add_service(service)
-end
+ParseFiles.map_services(groups,services,CONFIG_FILE)
+invoice_date = ParseFiles.parse_bill_file(services,call_type,BILL_FILE)
 
-invoice_date = ''
-file = File.new(telstra)
-file.each_line do |line|
-	fields = line.split(',')
-	service_number = fields[6]
-	
-	case fields[0]
-		when "DH"
-			invoice_date = fields[2]
-			
-		when "DS"
-			service = services.service(service_number)
-			service_summary = ServiceSummary.new(line,call_type)   
-			service.add_service_summary(service_summary)
-			
-		when "DC"
-			service = services.service(service_number)
-			call_detail = CallDetail.new(line,call_type)   
-			service.add_call_detail(call_detail)
-	end	
-end
-
-group = groups.group('Unassigned')
+group = groups.group(UNASSIGNED)
 services.each do |service|
-	group.add_service(service) if service.name == 'Unassigned'
+	group.add_service(service) if service.name == UNASSIGNED
 end
 
 cf = CreateFiles.new(invoice_date)
