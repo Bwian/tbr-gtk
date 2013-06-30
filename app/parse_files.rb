@@ -1,4 +1,7 @@
+require_relative 'log_it'
+
 class ParseFiles
+	
 	SERVICE_NUMBER			= 0
 	SERVICE_GROUP				= 1
 	SERVICE_NAME				= 2
@@ -63,7 +66,7 @@ class ParseFiles
 		
 		if fields.size < 4
 			#TODO: replace with logging
-			warn("Invalid configuration record: #{} - #{fields.to_s}")
+			LogIt.instance.warn("Invalid configuration record: - #{fields.to_s}")
 			return false
 		end
 		

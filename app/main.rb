@@ -7,10 +7,15 @@ require_relative 'group'
 require_relative 'groups'
 require_relative 'create_files'
 require_relative 'parse_files'
+require_relative 'log_it'
+
+# require 'debugger'; debugger
 
 BILL_FILE		= 'telstra.csv'
 CONFIG_FILE	= 'config/services.csv'
 UNASSIGNED	= 'Unassigned'
+
+LogIt.to_file('./logs/telstra.log')
 
 call_type = CallType.new
 call_type.load(BILL_FILE)
