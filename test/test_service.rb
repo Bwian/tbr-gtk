@@ -7,7 +7,7 @@ class TestService < Test::Unit::TestCase
   def setup
   	@service = Service.new(TEST_PHONE,'Brian Collins','1000')
   	@call_type = CallType.new
-  	@call_type.load('test/tc.csv') 	
+  	@call_type.load(CALL_TYPES)
   end
 
 	def test_accessors

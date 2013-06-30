@@ -1,11 +1,12 @@
 require 'test/unit'
+require_relative 'test_constants'
 require_relative '../app/call_detail'
 require_relative '../app/call_type'
 
 class TestCallDetail < Test::Unit::TestCase
   def setup
   	call_type = CallType.new
-  	call_type.load('test/tc.csv') 
+  	call_type.load(CALL_TYPES)
   	@call_detail = CallDetail.new(DC_RECORD,call_type)   
   end
 

@@ -1,10 +1,11 @@
 require 'test/unit'
+require_relative 'test_constants'
 require_relative '../app/call_type'
 
 class TestCallType < Test::Unit::TestCase
   def setup
   	@call_type = CallType.new
-  	@call_type.load('test/tc.csv')   
+  	@call_type.load(CALL_TYPES)
   end
 
 	def test_load

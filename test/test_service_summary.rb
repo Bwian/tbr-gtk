@@ -6,7 +6,7 @@ require_relative '../app/call_type'
 class TestServiceSummary < Test::Unit::TestCase
   def setup
   	call_type = CallType.new
-  	call_type.load('test/tc.csv') 
+  	call_type.load(CALL_TYPES)
   	@service_summary = ServiceSummary.new(DS_RECORD,call_type)   
   end
 

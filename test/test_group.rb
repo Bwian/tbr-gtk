@@ -7,7 +7,7 @@ class TestGroup < Test::Unit::TestCase
   def setup
   	@group = Group.new('Brian')
   	@call_type = CallType.new
-  	@call_type.load('test/tc.csv') 	
+  	@call_type.load(CALL_TYPES)
   end
 
 	def test_accessors
