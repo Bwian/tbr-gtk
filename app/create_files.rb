@@ -15,7 +15,7 @@ class CreateFiles
 	
   def initialize(invoice_date)
   	@invoice_month = Time.parse(invoice_date).strftime('%B %Y')
-  	@dir_root = './' + invoice_date[0..5]	
+  	@dir_root = './data/' + invoice_date[0..5]	
   	raise "#{File.realdirpath(@dir_root)} already exists" if File.exist?(@dir_root)
   	Dir.mkdir(@dir_root)
   	@dir_summaries = "#{@dir_root}/summaries"
