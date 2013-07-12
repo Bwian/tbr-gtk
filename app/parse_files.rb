@@ -25,7 +25,9 @@ class ParseFiles
 				group.add_service(service)
 			end
 		rescue Errno::ENOENT
-			raise IOError, "Error accessing configuration file: #{config_file}"
+      message = "Error accessing configuration file: #{config_file}"
+			LogIt.instance.fatal(message)
+      raise IOError, message
 		end
 	end
 	
@@ -55,7 +57,9 @@ class ParseFiles
 				end	
 			end
 		rescue Errno::ENOENT
-			raise IOError, "Error accessing billing file: #{bill_file}"
+			message = "Error accessing billing file: #{bill_file}"
+			LogIt.instance.fatal(message)
+      raise IOError, message
 		end
 		
 		invoice_date
@@ -65,7 +69,6 @@ class ParseFiles
 		return false if fields.size == 0
 		
 		if fields.size < 4
-			#TODO: replace with logging
 			LogIt.instance.warn("Invalid configuration record: - #{fields.to_s}")
 			return false
 		end
