@@ -1,3 +1,5 @@
+require 'time'
+
 class CallDetail
 
 # OBS record type DC - page 41

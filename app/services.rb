@@ -1,3 +1,5 @@
+# require_relative 'service'
+
 class Services
 
 # Services container

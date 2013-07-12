@@ -1,5 +1,6 @@
 require 'prawn'
 require 'prawn/measurement_extensions'
+require 'time'
 require_relative 'group'
 require_relative 'service'
 

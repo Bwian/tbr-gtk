@@ -1,8 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require 'fileutils'
 require_relative '../app/create_files'
 
-class TestCreateFiles < Test::Unit::TestCase
+class TestCreateFiles < MiniTest::Test
   def setup
   	FileUtils.rm_rf('./data/201304')
   	@cf = CreateFiles.new('20130418')   
@@ -20,19 +20,19 @@ class TestCreateFiles < Test::Unit::TestCase
 	end
 	
 	def test_invalid_invoice_date
-		assert_raise ArgumentError do
+		assert_raises ArgumentError do
 			cf = CreateFiles.new("")
 		end	
 	end
 	
 	def test_already_exists
-		assert_raise RuntimeError do
+		assert_raises RuntimeError do
 			cf = CreateFiles.new('20130418')
 		end
 	end
 	
 	def test_no_date
-		assert_raise ArgumentError do
+		assert_raises ArgumentError do
 			CreateFiles.new('') 
 		end
 	end

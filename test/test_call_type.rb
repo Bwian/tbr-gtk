@@ -1,8 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require_relative 'test_constants'
 require_relative '../app/call_type'
 
-class TestCallType < Test::Unit::TestCase
+class TestCallType < MiniTest::Test
   def setup
   	@call_type = CallType.new
   	@call_type.load(CALL_TYPES)

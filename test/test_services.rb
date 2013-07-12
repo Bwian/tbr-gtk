@@ -1,7 +1,8 @@
-require 'test/unit'
+require 'minitest/autorun'
 require_relative '../app/services'
+require_relative '../app/service'
 
-class TestServices < Test::Unit::TestCase
+class TestServices < MiniTest::Test
   def setup
   	@services = Services.new   
   end

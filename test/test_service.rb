@@ -1,9 +1,11 @@
-require 'test/unit'
+require 'minitest/autorun'
 require_relative 'test_constants'
 require_relative '../app/service'
 require_relative '../app/service_summary'
+require_relative '../app/call_type'
+require_relative '../app/call_detail'
 
-class TestService < Test::Unit::TestCase
+class TestService < MiniTest::Test
   def setup
   	@service = Service.new(TEST_PHONE,'Brian Collins','1000')
   	@call_type = CallType.new

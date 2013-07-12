@@ -1,4 +1,11 @@
+require_relative 'call_detail'
+require_relative 'call_type'
+require_relative 'groups'
 require_relative 'log_it'
+require_relative 'parse_files'
+require_relative 'service'
+require_relative 'services'
+require_relative 'service_summary'
 
 class ParseFiles
 	

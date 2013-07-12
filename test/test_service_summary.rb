@@ -1,9 +1,9 @@
-require 'test/unit'
+require 'minitest/autorun'
 require_relative 'test_constants'
 require_relative '../app/service_summary'
 require_relative '../app/call_type'
 
-class TestServiceSummary < Test::Unit::TestCase
+class TestServiceSummary < MiniTest::Test
   def setup
   	call_type = CallType.new
   	call_type.load(CALL_TYPES)
@@ -22,7 +22,7 @@ class TestServiceSummary < Test::Unit::TestCase
 	end
 	
 	def test_invalid_record_type
-		assert_raise ArgumentError do
+		assert_raises ArgumentError do
 			service_summary = ServiceSummary.new("XX",CallType.new)
 		end
 	end

@@ -1,3 +1,5 @@
+require_relative 'group'
+
 class Groups
 
 # Groups container

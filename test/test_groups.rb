@@ -1,7 +1,7 @@
-require 'test/unit'
+require 'minitest/autorun'
 require_relative '../app/groups'
 
-class TestGroups < Test::Unit::TestCase
+class TestGroups < MiniTest::Test
   def setup
   	@groups = Groups.new   
   end

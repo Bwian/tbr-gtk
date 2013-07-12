@@ -1,13 +1,12 @@
-require 'test/unit'
+require 'minitest/autorun'
+
 require_relative 'test_constants'
 require_relative '../app/service'
 require_relative '../app/group'
 
-class TestGroup < Test::Unit::TestCase
+class TestGroup < MiniTest::Test
   def setup
   	@group = Group.new('Brian')
-  	@call_type = CallType.new
-  	@call_type.load(CALL_TYPES)
   end
 
 	def test_accessors

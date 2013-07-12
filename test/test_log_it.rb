@@ -1,7 +1,9 @@
-require 'test/unit'
+require 'minitest/autorun'
+require'fileutils'
+ 
 require_relative '../app/log_it'
 
-class TestLogIt < Test::Unit::TestCase
+class TestLogIt < MiniTest::Test 
   def setup
   	@log = LogIt.instance
   end

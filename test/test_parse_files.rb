@@ -1,10 +1,10 @@
-require 'test/unit'
-#require_relative 'test_constants'
-require_relative '../app/parse_files'
-#require_relative '../app/service'
-#require_relative '../app/service_summary'
+require 'minitest/autorun'
 
-class TestParseFiles < Test::Unit::TestCase
+require_relative 'test_constants'
+require_relative '../app/parse_files'
+
+
+class TestParseFiles < MiniTest::Test
   def setup
   	@call_type = CallType.new
   	@call_type.load(CALL_TYPES)
@@ -19,7 +19,7 @@ class TestParseFiles < Test::Unit::TestCase
 	end
 	
 	def test_missing_config
-		assert_raise IOError do
+		assert_raises IOError do
 			ParseFiles.map_services(@groups,@services,MISSING)
 		end
 	end
@@ -34,7 +34,7 @@ class TestParseFiles < Test::Unit::TestCase
 	end
 	
 	def test_missing_bill_file
-		assert_raise IOError do
+		assert_raises IOError do
 			ParseFiles.parse_bill_file(@services,@call_type,MISSING)
 		end
 	end
