@@ -1,14 +1,9 @@
 require 'gtk2'
+require_relative 'main_gui'
 
 def file_changed(chosen, field)
   field.text = chosen.filename ? chosen.filename : ''
   field.width_chars = field.text.length
-end
-
-def refresh
-  while Gtk.events_pending? do
-    Gtk.main_iteration
-  end
 end
 
 def do_info(window,message)
@@ -69,23 +64,17 @@ scrolledw.border_width = 5
 scrolledw.add(textview)
 scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
 
+main = MainGUI.new(textview,progress)
+
 chooser.signal_connect('selection_changed') do |w|
   file_changed(chooser, input)
 end
 
 button.signal_connect(:clicked) do |w|
-  w.sensitive = false
-  textview.buffer.text = "This is a really long line so do I get a horizontal scrollbar too or do I have to create it?\n"
-  refresh
-  sleep 1
-  (1..30).each do |i|
-    progress.fraction = i/15.0
-    sleep 0.2
-    textview.buffer.insert(textview.buffer.end_iter,"Line #{i}\n")
-    textview.scroll_to_iter(textview.buffer.end_iter,0.0,false,0,0)
-    refresh
-  end
+  w.sensitive = false 
+  main.run
   w.sensitive = true
+  
   do_info(window,"Finished")
   do_error(window,"This thing is completely broken!")
 end

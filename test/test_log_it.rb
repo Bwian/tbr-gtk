@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require'fileutils'
+require 'gtk2'
  
 require_relative '../app/log_it'
 
@@ -41,4 +42,16 @@ class TestLogIt < MiniTest::Test
 		assert(File.size(fname) > 0)
     FileUtils.rm_rf(fname)
 	end	
+  
+  def test_testview
+    textview = Gtk::TextView.new
+    
+    # Needed to stop GtkTextLayout error
+    scrolledw = Gtk::ScrolledWindow.new
+    scrolledw.add(textview)
+    
+    @log.textview = textview
+    @log.info("Hello World")
+    assert_equal("Hello World\n",textview.buffer.text)
+  end
 end

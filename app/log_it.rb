@@ -1,5 +1,6 @@
 require 'logger'
 require 'singleton'
+require 'gtk2'
 
 class LogIt < Logger
 	include Singleton
@@ -22,9 +23,29 @@ class LogIt < Logger
   	@logdev = Logger::LogDevice.new(file)
   end
   
+  def textview=(textview)
+    @textview = textview
+  end
+  
+  def add(severity, message, progname)
+    super(severity, message, progname)
+    if @textview
+      @textview.buffer.insert(@textview.buffer.end_iter,"#{progname}\n")
+      @textview.scroll_to_iter(@textview.buffer.end_iter,0.0,false,0,0)
+      refresh
+    end
+  end
+  
 	private
 		
   def initialize
 		super('/dev/null')
+    @textview = nil
+  end
+  
+  def refresh
+    while Gtk.events_pending? do
+      Gtk.main_iteration
+    end
   end
 end
