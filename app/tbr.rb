@@ -1,5 +1,5 @@
 require 'gtk2'
-require_relative 'main_gui'
+require_relative 'process_bills'
 
 def file_changed(chosen, field)
   field.text = chosen.filename ? chosen.filename : ''
@@ -64,8 +64,11 @@ scrolledw.border_width = 5
 scrolledw.add(textview)
 scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
 
-main = MainGUI.new(textview,progress)
-# TODO: Replace MainGUI with ProcessBills
+BILL_FILE		= './data/telstra.csv'
+CONFIG_FILE	= './config/services.csv'
+
+process_bills = ProcessBills.new(textview,progress)
+
 chooser.signal_connect('selection_changed') do |w|
   file_changed(chooser, input)
 end
@@ -74,7 +77,7 @@ button.signal_connect(:clicked) do |w|
 # TODO: Check files OK.
   
   w.sensitive = false 
-  main.run
+  process_bills.run(CONFIG_FILE,BILL_FILE)
   w.sensitive = true
   
   do_info(window,"Processing billing file finished")
