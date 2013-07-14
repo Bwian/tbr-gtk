@@ -8,8 +8,7 @@ class MainGUI
     @progress = progress
     @log = LogIt.instance
     @log.to_file('./logs/telstra.log')
-    @log.textview = textview
-    
+    @log.textview = textview 
   end
   
   def run   

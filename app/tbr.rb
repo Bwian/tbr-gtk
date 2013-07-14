@@ -65,18 +65,19 @@ scrolledw.add(textview)
 scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
 
 main = MainGUI.new(textview,progress)
-
+# TODO: Replace MainGUI with ProcessBills
 chooser.signal_connect('selection_changed') do |w|
   file_changed(chooser, input)
 end
 
 button.signal_connect(:clicked) do |w|
+# TODO: Check files OK.
+  
   w.sensitive = false 
   main.run
   w.sensitive = true
   
-  do_info(window,"Finished")
-  do_error(window,"This thing is completely broken!")
+  do_info(window,"Processing billing file finished")
 end
 
 hbox = Gtk::HBox.new(false, 5)
