@@ -5,6 +5,32 @@ def file_changed(chosen, field)
   field.width_chars = field.text.length
 end
 
+def refresh
+  while Gtk.events_pending? do
+    Gtk.main_iteration
+  end
+end
+
+def do_info(window,message)
+  dialog = Gtk::MessageDialog.new(window, 
+                                  Gtk::Dialog::DESTROY_WITH_PARENT,
+                                  Gtk::MessageDialog::INFO,
+                                  Gtk::MessageDialog::BUTTONS_OK,
+                                  message)
+  dialog.run
+  dialog.destroy
+end
+
+def do_error(window,message)
+  dialog = Gtk::MessageDialog.new(window, 
+                                  Gtk::Dialog::DESTROY_WITH_PARENT,
+                                  Gtk::MessageDialog::ERROR,
+                                  Gtk::MessageDialog::BUTTONS_OK,
+                                  message)
+  dialog.run
+  dialog.destroy
+end
+
 window = Gtk::Window.new("Telstra Billing Reporter")
 window.border_width = 20
 window.signal_connect('destroy') { Gtk.main_quit }
@@ -12,6 +38,16 @@ window.resize(600,400)
 
 chooser = Gtk::FileChooserButton.new(
     "Choose a Billing File", Gtk::FileChooser::ACTION_OPEN)
+
+filter1 = Gtk::FileFilter.new
+filter1.name = "CSV Files"
+filter1.add_pattern('*.csv')
+chooser.add_filter(filter1) # 1st added will be the default
+
+filter2 = Gtk::FileFilter.new
+filter2.name = "All Files"
+filter2.add_pattern('*')
+chooser.add_filter(filter2)
 
 input_label = Gtk::Label.new
 input_label.text = 'File path:'
@@ -21,8 +57,12 @@ input.text = 'telstra.csv'
 
 button = Gtk::Button.new('Begin processing')
 
-buffer = Gtk::TextBuffer.new
-textview = Gtk::TextView.new(buffer)
+progress = Gtk::ProgressBar.new
+
+textview = Gtk::TextView.new
+textview.editable = false
+textview.cursor_visible = false
+textview.indent = 10
 
 scrolledw = Gtk::ScrolledWindow.new
 scrolledw.border_width = 5
@@ -34,22 +74,21 @@ chooser.signal_connect('selection_changed') do |w|
 end
 
 button.signal_connect(:clicked) do |w|
-  # button.sensitive = false
-  puts "clicked"
-  buffer.text = 'Line 1'
-  sleep 2
-  buffer.insert(buffer.end_iter,"Line 2")
-  # button.sensitive = true
+  w.sensitive = false
+  textview.buffer.text = "This is a really long line so do I get a horizontal scrollbar too or do I have to create it?\n"
+  refresh
+  sleep 1
+  (1..30).each do |i|
+    progress.fraction = i/15.0
+    sleep 0.2
+    textview.buffer.insert(textview.buffer.end_iter,"Line #{i}\n")
+    textview.scroll_to_iter(textview.buffer.end_iter,0.0,false,0,0)
+    refresh
+  end
+  w.sensitive = true
+  do_info(window,"Finished")
+  do_error(window,"This thing is completely broken!")
 end
-
-filter1 = Gtk::FileFilter.new
-filter2 = Gtk::FileFilter.new
-filter1.name = "CSV Files"
-filter2.name = "All Files"
-filter1.add_pattern('*.csv')
-filter2.add_pattern('*')
-chooser.add_filter(filter1) # 1st added will be the default
-chooser.add_filter(filter2)
 
 hbox = Gtk::HBox.new(false, 5)
 hbox.pack_start(input_label,false,false,5)
@@ -60,6 +99,8 @@ vbox = Gtk::VBox.new(false, 5)
 vbox.pack_start(hbox,false,false,5)
 vbox.pack_start(button,false,false,5)
 vbox.pack_start_defaults(scrolledw)
+vbox.pack_start(progress,false,false,5)
+
 window.add(vbox)
 window.show_all
 
