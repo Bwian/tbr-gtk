@@ -51,9 +51,7 @@ class TestLogIt < MiniTest::Test
     scrolledw.add(textview)
     
     @log.textview = textview
-    @log.info("Hello World")
+    test_to_file
     assert_equal("Hello World\n",textview.buffer.text)
-    
-    flunk "Corresponding records not written to log file"
   end
 end
