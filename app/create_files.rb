@@ -1,6 +1,7 @@
 require 'prawn'
 require 'prawn/measurement_extensions'
 require 'time'
+require 'fileutils'
 require_relative 'group'
 require_relative 'service'
 
@@ -35,6 +36,11 @@ class CreateFiles
   
   def service_totals(services)
   	create_service_totals(services)
+  end
+  
+  def self.archive(bill_file)
+    to_file = "./data/archive/bills#{Time.now.strftime('%Y%m%d.%H%M%S.csv')}"
+    FileUtils.mv(bill_file,to_file)
   end
   
   private
@@ -162,4 +168,5 @@ class CreateFiles
 			end
 		end
   end
+
 end

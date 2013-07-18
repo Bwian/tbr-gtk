@@ -1,3 +1,4 @@
+require_relative 'create_files'
 require_relative 'process_bills'
 require_relative 'helper'
 require_relative 'log_it'
@@ -29,3 +30,5 @@ end
 
 process_bills = ProcessBills.new(nil,nil)
 process_bills.run(CONFIG_FILE,BILL_FILE)
+
+CreateFiles.archive(BILL_FILE)

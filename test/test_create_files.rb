@@ -9,7 +9,7 @@ class TestCreateFiles < MiniTest::Test
   end
 
 	def teardown
-  	FileUtils.rm_rf('./data/201304')   
+    FileUtils.rm_rf('./data/201304')   
   end
   
 	def test_accessors
@@ -36,6 +36,15 @@ class TestCreateFiles < MiniTest::Test
 			CreateFiles.new('') 
 		end
 	end
+  
+  def test_archive
+    FileUtils.rm_rf('./data/bills*.csv')
+    FileUtils.cp('./test/data/bills.csv', './data/bills.csv')
+    CreateFiles.archive('./data/bills.csv')
+    assert(Dir.glob('./data/bills*.csv').empty?)  
+    assert(!Dir.glob('./data/archive/bills*.csv').empty?)  
+    FileUtils.rm_rf('./data/archive/bills*.csv')   
+  end
 	
 	# TODO: test file creation methods
 end
