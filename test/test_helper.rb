@@ -29,4 +29,23 @@ class TestHelper < MiniTest::Test
     FileUtils.rm_rf('./tmp')
   end
   
+  def test_base_directory
+    ENV["OCRA_EXECUTABLE"] = '/tmp/tbr.exe'
+    assert_equal('/tmp',@helper.base_directory)
+    ENV["OCRA_EXECUTABLE"] = ''
+    assert_equal(Dir.pwd,@helper.base_directory)
+    ENV["OCRA_EXECUTABLE"] = nil
+    assert_equal(Dir.pwd,@helper.base_directory)
+  end
+  
+  def test_config_path
+    ENV["OCRA_EXECUTABLE"] = '/tmp/tbr.exe'
+    assert_equal('/tmp/config/services.csv',@helper.config_path)
+  end
+  
+  def test_bill_path
+    root = "#{Dir.pwd}/test"
+    ENV["OCRA_EXECUTABLE"] = "#{root}/tbr.exe"
+    assert_equal("#{root}/data/latest.csv",@helper.bill_path)
+  end
 end

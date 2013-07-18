@@ -1,30 +1,13 @@
 require 'gtk2'
 require_relative 'process_bills'
+require_relative 'helper'
 
 def file_changed(chosen, field)
   field.text = chosen.filename ? chosen.filename : ''
   field.width_chars = field.text.length
 end
 
-def do_info(window,message)
-  dialog = Gtk::MessageDialog.new(window, 
-                                  Gtk::Dialog::DESTROY_WITH_PARENT,
-                                  Gtk::MessageDialog::INFO,
-                                  Gtk::MessageDialog::BUTTONS_OK,
-                                  message)
-  dialog.run
-  dialog.destroy
-end
-
-def do_error(window,message)
-  dialog = Gtk::MessageDialog.new(window, 
-                                  Gtk::Dialog::DESTROY_WITH_PARENT,
-                                  Gtk::MessageDialog::ERROR,
-                                  Gtk::MessageDialog::BUTTONS_OK,
-                                  message)
-  dialog.run
-  dialog.destroy
-end
+helper = Helper.new
 
 window = Gtk::Window.new("Telstra Billing Reporter")
 window.border_width = 20
@@ -32,7 +15,7 @@ window.signal_connect('destroy') { Gtk.main_quit }
 window.resize(600,400)
 
 chooser = Gtk::FileChooserButton.new(
-    "Choose a Billing File", Gtk::FileChooser::ACTION_OPEN)
+  "Choose a Billing File", Gtk::FileChooser::ACTION_OPEN)
 
 filter1 = Gtk::FileFilter.new
 filter1.name = "CSV Files"
@@ -47,8 +30,8 @@ chooser.add_filter(filter2)
 input_label = Gtk::Label.new
 input_label.text = 'File path:'
 
-input = Gtk::Entry.new
-input.text = 'telstra.csv'
+bill_file = Gtk::Entry.new
+bill_file.text = helper.bill_path
 
 button = Gtk::Button.new('Begin processing')
 
@@ -64,28 +47,27 @@ scrolledw.border_width = 5
 scrolledw.add(textview)
 scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
 
-BILL_FILE		= './data/telstra.csv'
-CONFIG_FILE	= './config/services.csv'
+config_file	= helper.config_path
 
 process_bills = ProcessBills.new(textview,progress)
 
 chooser.signal_connect('selection_changed') do |w|
-  file_changed(chooser, input)
+  file_changed(chooser, bill_file)
 end
 
 button.signal_connect(:clicked) do |w|
 # TODO: Check files OK.
   
   w.sensitive = false 
-  process_bills.run(CONFIG_FILE,BILL_FILE)
+  process_bills.run(config_file,bill_file.text)
   w.sensitive = true
   
-  do_info(window,"Processing billing file finished")
+  helper.do_info(window,"Processing billing file finished")
 end
 
 hbox = Gtk::HBox.new(false, 5)
 hbox.pack_start(input_label,false,false,5)
-hbox.pack_start_defaults(input)
+hbox.pack_start_defaults(bill_file)
 hbox.pack_start(chooser,false,false,5)
 
 vbox = Gtk::VBox.new(false, 5)

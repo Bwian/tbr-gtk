@@ -1,3 +1,5 @@
+require 'gtk2'
+
 class Helper
   
   DIRECTORY_STRUCTURE = [
@@ -37,4 +39,50 @@ class Helper
       
     ans == 'y'
   end
+  
+  def do_info(window,message)
+    dialog = Gtk::MessageDialog.new(window, 
+                                    Gtk::Dialog::DESTROY_WITH_PARENT,
+                                    Gtk::MessageDialog::INFO,
+                                    Gtk::MessageDialog::BUTTONS_OK,
+                                    message)
+    dialog.run
+    dialog.destroy
+  end
+
+  def do_error(window,message)
+    dialog = Gtk::MessageDialog.new(window, 
+                                    Gtk::Dialog::DESTROY_WITH_PARENT,
+                                    Gtk::MessageDialog::ERROR,
+                                    Gtk::MessageDialog::BUTTONS_OK,
+                                    message)
+    dialog.run
+    dialog.destroy
+  end
+  
+  def do_yn(window,message)
+    dialog = Gtk::MessageDialog.new(window, 
+                                    Gtk::Dialog::DESTROY_WITH_PARENT,
+                                    Gtk::MessageDialog::ERROR,
+                                    Gtk::MessageDialog::BUTTONS_YES_NO,
+                                    message)
+    response = dialog.run
+    dialog.destroy
+    response == Gtk::Dialog::RESPONSE_YES
+  end
+  
+  def config_path
+    "#{base_directory}/config/services.csv"
+  end
+  
+  def bill_path
+    path = Dir.glob("#{base_directory}/data/*.csv").sort_by {|f| File.mtime(f)}.last
+    path.nil? || path.empty? ? base_directory : path  
+  end
+  
+  def base_directory
+    exe = ENV["OCRA_EXECUTABLE"]
+    exe.nil? || exe.empty? ? Dir.pwd : File.dirname(exe) 
+  end
+  
 end
