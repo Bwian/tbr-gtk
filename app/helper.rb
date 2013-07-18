@@ -27,4 +27,14 @@ class Helper
     Dir.chdir(root)
   end
   
+  def yn(prompt,default)
+    ans = 'x'
+    while !(/[yn]/ =~ ans)
+      print "#{prompt}: #{default}\C-h"
+      ans = STDIN.gets.chomp
+      ans = ans.empty? ? default : ans[0].downcase 
+    end
+      
+    ans == 'y'
+  end
 end
