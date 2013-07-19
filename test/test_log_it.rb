@@ -52,6 +52,6 @@ class TestLogIt < MiniTest::Test
     
     @log.textview = textview
     test_to_file
-    assert_equal("Hello World\n",textview.buffer.text)
+    assert_equal("Warning - Hello World\n",textview.buffer.text)
   end
 end

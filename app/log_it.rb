@@ -29,8 +29,9 @@ class LogIt < Logger
   
   def add(severity, message, progname)
     super(severity, message, progname)
+    
     if @textview
-      @textview.buffer.insert(@textview.buffer.end_iter,"#{progname}\n")
+      @textview.buffer.insert(@textview.buffer.end_iter,"#{@severity[severity]}#{progname}\n")
       @textview.scroll_to_iter(@textview.buffer.end_iter,0.0,false,0,0)
       refresh
     end
@@ -41,6 +42,14 @@ class LogIt < Logger
   def initialize
 		super('/dev/null')
     @textview = nil
+    
+    @severity = Hash.new
+    @severity[Logger::UNKNOWN]  = ''
+    @severity[Logger::DEBUG]    = ''
+    @severity[Logger::INFO]     = ''
+    @severity[Logger::WARN]     = 'Warning - '
+    @severity[Logger::ERROR]    = 'Error - '
+    @severity[Logger::FATAL]    = 'Fatal - '
   end
   
   def refresh
