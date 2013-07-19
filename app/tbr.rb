@@ -8,6 +8,10 @@ def file_changed(chosen, field)
   field.width_chars = field.text.length
 end
 
+def dummy_menu(helper,window)
+  helper.do_info(window,'Menu option not yet implemented')
+end
+
 helper = Helper.new
 
 Dir.chdir(helper.base_directory)
@@ -50,19 +54,84 @@ scrolledw.border_width = 5
 scrolledw.add(textview)
 scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
 
-mb = Gtk::MenuBar.new
+accel_group = Gtk::AccelGroup.new
 
-filemenu = Gtk::Menu.new
-filem = Gtk::MenuItem.new "File"
-filem.set_submenu filemenu
+# File Menu
+file_menu = Gtk::Menu.new
+file_mi = Gtk::MenuItem.new "File"
+file_mi.set_submenu file_menu
 
-exit = Gtk::MenuItem.new "Exit"
-exit.signal_connect "activate" do
+rebuild_mi = Gtk::MenuItem.new "Rebuild directory structure"
+rebuild_mi.signal_connect "activate" do
+  dummy_menu(helper,window)
+end
+
+initialise_mi = Gtk::MenuItem.new "Initialise configuration file"
+initialise_mi.signal_connect "activate" do
+  dummy_menu(helper,window)
+end
+
+delete_mi = Gtk::MenuItem.new "Delete current reports"
+delete_mi.signal_connect "activate" do
+  dummy_menu(helper,window)
+end
+
+exit_mi = Gtk::MenuItem.new "Exit"
+exit_mi.signal_connect "activate" do
     Gtk.main_quit
 end
 
-filemenu.append exit
-mb.append filem
+file_menu.append rebuild_mi
+file_menu.append initialise_mi
+file_menu.append delete_mi
+file_menu.append exit_mi
+
+# Edit Menu
+edit_menu = Gtk::Menu.new
+edit_mi = Gtk::MenuItem.new "Edit"
+edit_mi.set_submenu edit_menu
+
+cut_mi = Gtk::ImageMenuItem.new(Gtk::Stock::CUT, accel_group)
+cut_mi.signal_connect "activate" do
+  bill_file.cut_clipboard
+end
+
+copy_mi = Gtk::ImageMenuItem.new(Gtk::Stock::COPY, accel_group)
+copy_mi.signal_connect "activate" do
+  bill_file.copy_clipboard
+end
+
+paste_mi = Gtk::ImageMenuItem.new(Gtk::Stock::PASTE, accel_group)
+paste_mi.signal_connect "activate" do
+  bill_file.paste_clipboard
+end
+
+edit_menu.append cut_mi
+edit_menu.append copy_mi
+edit_menu.append paste_mi
+
+# Review Menu
+review_menu = Gtk::Menu.new
+review_mi = Gtk::MenuItem.new "Review"
+review_mi.set_submenu review_menu
+
+logfile_mi = Gtk::MenuItem.new "Review log file"
+logfile_mi.signal_connect "activate" do
+  dummy_menu(helper,window)
+end
+
+configfile_mi = Gtk::MenuItem.new "Review configuration file"
+configfile_mi.signal_connect "activate" do
+  dummy_menu(helper,window)
+end
+
+review_menu.append logfile_mi
+review_menu.append configfile_mi
+
+mb = Gtk::MenuBar.new
+mb.append file_mi
+mb.append edit_mi
+mb.append review_mi
 
 config_file	= helper.config_path
 process_bills = ProcessBills.new(textview,progress)
@@ -73,9 +142,9 @@ end
 
 button.signal_connect(:clicked) do |w|
   if !helper.check_directory_structure
-    helper.do_error(window, "Error in directory structure: #{helper.base_directory}\nRebuild with 'File > Rebuild directory structure")
+    helper.do_error(window, "Error in directory structure: #{helper.base_directory}\nRebuild with 'File > Rebuild directory")
   elsif !File.exists?(helper.config_path)
-    helper.do_error(window, "Missing configuration file: #{helper.config_path} \nInitialise with 'File > Initialise config file'")
+    helper.do_error(window, "Missing configuration file: #{helper.config_path} \nInitialise with 'File > Initialise configuration'")
   elsif !File.exists?(bill_file.text)
     helper.do_error(window, "Missing billing file: #{bill_file.text}")
   else
