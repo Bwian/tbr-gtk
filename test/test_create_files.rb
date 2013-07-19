@@ -26,7 +26,7 @@ class TestCreateFiles < MiniTest::Test
 	end
 	
 	def test_already_exists
-		assert_raises RuntimeError do
+		assert_raises IOError do
 			cf = CreateFiles.new('20130418')
 		end
 	end

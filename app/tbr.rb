@@ -1,6 +1,7 @@
 require 'gtk2'
 require_relative 'process_bills'
 require_relative 'helper'
+require_relative 'log_it'
 
 def file_changed(chosen, field)
   field.text = chosen.filename ? chosen.filename : ''
@@ -78,11 +79,17 @@ button.signal_connect(:clicked) do |w|
   elsif !File.exists?(bill_file.text)
     helper.do_error(window, "Missing billing file: #{bill_file.text}")
   else
+    textview.buffer.text = ''
     w.sensitive = false 
-    process_bills.run(config_file,bill_file.text)
+    begin
+      process_bills.run(config_file,bill_file.text)
+      helper.do_info(window,"Processing billing file finished")
+    rescue IOError => e
+      LogIt.instance.error(e.message)
+      LogIt.instance.error(e.backtrace.inspect)
+      helper.do_error(window,e.message)
+    end 
     w.sensitive = true
-  
-    helper.do_info(window,"Processing billing file finished") 
   end
 end
 
