@@ -31,6 +31,7 @@ class ParseFiles
 				service.cost_centre = fields[SERVICE_CC]
 				group.add_service(service)
 			end
+      LogIt.instance.warn("Empty configuration file. All services will be classified as unassigned") if file.size == 0
 		rescue Errno::ENOENT
       message = "Error accessing configuration file: #{config_file}"
 			LogIt.instance.fatal(message)
