@@ -11,7 +11,7 @@ class Helper
   def check_directory_structure
     DIRECTORY_STRUCTURE.each do |dir|
       dname = "./#{dir.join('/')}"
-      return false if !Dir.exists?(dname)
+      return false unless Dir.exists?(dname)
     end  
     true
   end
@@ -22,7 +22,7 @@ class Helper
       Dir.chdir(root)
       dir.each do |sub|
         subname = "./#{sub}"
-        Dir.mkdir(subname) if !Dir.exists?(subname)
+        Dir.mkdir(subname) unless Dir.exists?(subname)
         Dir.chdir(subname)
       end
     end

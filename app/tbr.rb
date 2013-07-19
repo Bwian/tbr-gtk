@@ -9,10 +9,11 @@ end
 
 helper = Helper.new
 
+Dir.chdir(helper.base_directory)
+
 window = Gtk::Window.new("Telstra Billing Reporter")
-window.border_width = 20
 window.signal_connect('destroy') { Gtk.main_quit }
-window.resize(600,400)
+window.resize(400,400)
 
 chooser = Gtk::FileChooserButton.new(
   "Choose a Billing File", Gtk::FileChooser::ACTION_OPEN)
@@ -32,6 +33,7 @@ input_label.text = 'File path:'
 
 bill_file = Gtk::Entry.new
 bill_file.text = helper.bill_path
+bill_file.width_chars = bill_file.text.length
 
 button = Gtk::Button.new('Begin processing')
 
@@ -47,8 +49,21 @@ scrolledw.border_width = 5
 scrolledw.add(textview)
 scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
 
-config_file	= helper.config_path
+mb = Gtk::MenuBar.new
 
+filemenu = Gtk::Menu.new
+filem = Gtk::MenuItem.new "File"
+filem.set_submenu filemenu
+
+exit = Gtk::MenuItem.new "Exit"
+exit.signal_connect "activate" do
+    Gtk.main_quit
+end
+
+filemenu.append exit
+mb.append filem
+
+config_file	= helper.config_path
 process_bills = ProcessBills.new(textview,progress)
 
 chooser.signal_connect('selection_changed') do |w|
@@ -56,13 +71,19 @@ chooser.signal_connect('selection_changed') do |w|
 end
 
 button.signal_connect(:clicked) do |w|
-# TODO: Check files OK.
+  if !helper.check_directory_structure
+    helper.do_error(window, "Error in directory structure: #{helper.base_directory}\nRebuild with 'File > Rebuild directory structure")
+  elsif !File.exists?(helper.config_path)
+    helper.do_error(window, "Missing configuration file: #{helper.config_path} \nInitialise with 'File > Initialise config file'")
+  elsif !File.exists?(bill_file.text)
+    helper.do_error(window, "Missing billing file: #{bill_file.text}")
+  else
+    w.sensitive = false 
+    process_bills.run(config_file,bill_file.text)
+    w.sensitive = true
   
-  w.sensitive = false 
-  process_bills.run(config_file,bill_file.text)
-  w.sensitive = true
-  
-  helper.do_info(window,"Processing billing file finished")
+    helper.do_info(window,"Processing billing file finished") 
+  end
 end
 
 hbox = Gtk::HBox.new(false, 5)
@@ -71,12 +92,17 @@ hbox.pack_start_defaults(bill_file)
 hbox.pack_start(chooser,false,false,5)
 
 vbox = Gtk::VBox.new(false, 5)
+vbox.border_width = 10
 vbox.pack_start(hbox,false,false,5)
 vbox.pack_start(button,false,false,5)
 vbox.pack_start_defaults(scrolledw)
 vbox.pack_start(progress,false,false,5)
 
-window.add(vbox)
+mainbox = Gtk::VBox.new(false, 0)
+mainbox.pack_start(mb,false,false,0)
+mainbox.pack_start_defaults(vbox)
+
+window.add(mainbox)
 window.show_all
 
 Gtk.main
