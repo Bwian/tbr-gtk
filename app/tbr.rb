@@ -68,12 +68,21 @@ file_mi.set_submenu file_menu
 
 rebuild_mi = Gtk::MenuItem.new "Rebuild directory structure"
 rebuild_mi.signal_connect "activate" do
-  dummy_menu(helper,window)
+  if helper.check_directory_structure
+    helper.do_info(window,'Directory structure OK')
+  else
+    helper.fix_directory_structure
+    helper.do_info(window,'Directory structure rebuilt')
+  end
 end
 
 initialise_mi = Gtk::MenuItem.new "Initialise configuration file"
 initialise_mi.signal_connect "activate" do
-  dummy_menu(helper,window)
+  if helper.do_yn(window,'OK to remove configuration file?')
+    f = File.open(helper.config_path,'w')
+    f.close
+    helper.do_info(window,"Configuration file #{helper.config_path} set to zero length.  All services will be flagged as 'Unassigned'.")
+  end
 end
 
 delete_mi = Gtk::MenuItem.new "Delete current reports"
