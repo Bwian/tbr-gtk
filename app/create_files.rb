@@ -4,6 +4,7 @@ require 'time'
 require 'fileutils'
 require_relative 'group'
 require_relative 'service'
+require_relative 'log_it'
 
 class CreateFiles
 	ROW_COLOUR_ODD  = "EBD6D6"
@@ -39,8 +40,9 @@ class CreateFiles
   end
   
   def self.archive(bill_file)
-    to_file = "./data/archive/bills#{Time.now.strftime('%Y%m%d.%H%M%S.csv')}"
+    to_file = "#{Dir.pwd}/data/archive/bills#{Time.now.strftime('%Y%m%d.%H%M%S.csv')}"
     FileUtils.mv(bill_file,to_file)
+    LogIt.instance.info("Billing file archived to #{to_file}")
   end
   
   private

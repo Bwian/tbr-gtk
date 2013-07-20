@@ -9,7 +9,7 @@ BILL_FILE		= './data/telstra.csv'
 CONFIG_FILE	= './config/services.csv'
 
 helper = Helper.new
-log = LogIt.instance
+LogIt.instance.to_file('./logs/telstra.log') # Initialise logging
 
 if !helper.check_directory_structure && helper.yn("Rebuild directory structure in #{Dir.pwd}",'y')
   helper.fix_directory_structure
@@ -28,7 +28,5 @@ if !File.exists?(CONFIG_FILE)
   end
 end
 
-process_bills = ProcessBills.new(nil,nil)
+process_bills = ProcessBills.new
 process_bills.run(CONFIG_FILE,BILL_FILE)
-
-CreateFiles.archive(BILL_FILE)

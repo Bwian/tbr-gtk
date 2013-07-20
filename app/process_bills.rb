@@ -13,12 +13,9 @@ class ProcessBills
 
   UNASSIGNED	= 'Unassigned'  
   
-  def initialize(textview,progress)
-    @textview = textview
-    @progress = progress
+  def initialize
     @log = LogIt.instance
-    @log.to_file('./logs/telstra.log')
-    @log.textview = textview 
+    @textview = nil
   end
   
   def run (config_file,bill_file)
@@ -56,6 +53,8 @@ class ProcessBills
     @log.info("Creating service totals summary")
     cf.service_totals(services)
 
+    CreateFiles.archive(bill_file)
+    
     @log.info("Telstra Billing Data Extract completed.") 
   end 
 end

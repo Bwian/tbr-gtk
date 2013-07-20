@@ -13,6 +13,7 @@ def dummy_menu(helper,window)
 end
 
 helper = Helper.new
+LogIt.instance.to_file('./logs/telstra.log') # Initialise logging
 
 Dir.chdir(helper.base_directory)
 
@@ -48,6 +49,7 @@ textview = Gtk::TextView.new
 textview.editable = false
 textview.cursor_visible = false
 textview.indent = 10
+LogIt.instance.textview = textview
 
 scrolledw = Gtk::ScrolledWindow.new
 scrolledw.border_width = 5
@@ -134,7 +136,7 @@ mb.append edit_mi
 mb.append review_mi
 
 config_file	= helper.config_path
-process_bills = ProcessBills.new(textview,progress)
+process_bills = ProcessBills.new
 
 chooser.signal_connect('selection_changed') do |w|
   file_changed(chooser, bill_file)
