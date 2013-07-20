@@ -20,7 +20,7 @@ class ProcessBills
     @pb = ProgressIt.instance
   end
   
-  def run (config_file,bill_file)
+  def run (config_file,bill_file,replace)
     @log.info("Starting Telstra Billing Data Extract")
 
     @log.info("Extracting Call Types from #{bill_file}")
@@ -43,7 +43,7 @@ class ProcessBills
 
     @pb.total = groups.size + services.size + 2 # totals plus archive
     
-    cf = CreateFiles.new(invoice_date)
+    cf = CreateFiles.new(invoice_date,replace)
     @log.info("Creating group summaries")
     groups.each do |group|
     	@pb.increment

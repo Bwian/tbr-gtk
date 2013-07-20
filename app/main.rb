@@ -29,4 +29,4 @@ if !File.exists?(CONFIG_FILE)
 end
 
 process_bills = ProcessBills.new
-process_bills.run(CONFIG_FILE,BILL_FILE)
+process_bills.run(CONFIG_FILE,BILL_FILE,true)

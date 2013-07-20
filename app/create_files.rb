@@ -16,10 +16,11 @@ class CreateFiles
 # Header for each phone service
 	attr_reader :invoice_month, :dir_root
 	
-  def initialize(invoice_date)
+  def initialize(invoice_date,replace)
   	@invoice_month = Time.parse(invoice_date).strftime('%B %Y')
   	@dir_root = './data/' + invoice_date[0..5]	
-  	raise IOError, "#{File.realdirpath(@dir_root)} already exists" if File.exist?(@dir_root)
+  	FileUtils.rm_rf(@dir_root) if replace
+    raise IOError, "#{File.realdirpath(@dir_root)} already exists" if File.exist?(@dir_root)
   	Dir.mkdir(@dir_root)
   	@dir_summaries = "#{@dir_root}/summaries"
   	@dir_details = "#{@dir_root}/details"

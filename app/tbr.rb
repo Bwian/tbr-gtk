@@ -15,6 +15,7 @@ end
 
 helper = Helper.new
 LogIt.instance.to_file('./logs/telstra.log') # Initialise logging
+replace = false  # Replace previous run's directory
 
 Dir.chdir(helper.base_directory)
 
@@ -77,7 +78,8 @@ end
 
 delete_mi = Gtk::MenuItem.new "Delete current reports"
 delete_mi.signal_connect "activate" do
-  dummy_menu(helper,window)
+  replace = true
+  helper.do_info(window,'Report directory will be replaced in next run.')
 end
 
 exit_mi = Gtk::MenuItem.new "Exit"
@@ -155,7 +157,7 @@ button.signal_connect(:clicked) do |w|
     textview.buffer.text = ''
     w.sensitive = false 
     begin
-      process_bills.run(config_file,bill_file.text)
+      process_bills.run(config_file,bill_file.text,replace)
       helper.do_info(window,"Processing billing file finished")
     rescue IOError => e
       LogIt.instance.error(e.message)

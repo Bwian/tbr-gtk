@@ -5,7 +5,7 @@ require_relative '../app/create_files'
 class TestCreateFiles < MiniTest::Test
   def setup
   	FileUtils.rm_rf('./data/201304')
-  	@cf = CreateFiles.new('20130418')   
+  	@cf = CreateFiles.new('20130418',false)   
   end
 
 	def teardown
@@ -21,19 +21,13 @@ class TestCreateFiles < MiniTest::Test
 	
 	def test_invalid_invoice_date
 		assert_raises ArgumentError do
-			cf = CreateFiles.new("")
+			CreateFiles.new("",false)
 		end	
 	end
 	
 	def test_already_exists
 		assert_raises IOError do
-			cf = CreateFiles.new('20130418')
-		end
-	end
-	
-	def test_no_date
-		assert_raises ArgumentError do
-			CreateFiles.new('') 
+			CreateFiles.new('20130418',false)
 		end
 	end
   
