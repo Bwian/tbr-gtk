@@ -8,6 +8,7 @@ require_relative 'groups'
 require_relative 'create_files'
 require_relative 'parse_files'
 require_relative 'log_it'
+require_relative 'progress_it'
 
 class ProcessBills
 
@@ -16,6 +17,7 @@ class ProcessBills
   def initialize
     @log = LogIt.instance
     @textview = nil
+    @pb = ProgressIt.instance
   end
   
   def run (config_file,bill_file)
@@ -39,20 +41,26 @@ class ProcessBills
     	group.add_service(service) if service.name == UNASSIGNED
     end
 
+    @pb.total = groups.size + services.size + 2 # totals plus archive
+    
     cf = CreateFiles.new(invoice_date)
     @log.info("Creating group summaries")
     groups.each do |group|
-    	cf.group_summary(group)
+    	@pb.increment
+      cf.group_summary(group)
     end
 
     @log.info("Creating service details")
     services.each do |service|
-    	cf.call_details(service)
+    	@pb.increment
+      cf.call_details(service)
     end
 
     @log.info("Creating service totals summary")
+    @pb.increment
     cf.service_totals(services)
 
+    @pb.increment
     CreateFiles.archive(bill_file)
     
     @log.info("Telstra Billing Data Extract completed.") 

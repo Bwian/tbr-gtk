@@ -2,6 +2,7 @@ require 'gtk2'
 require_relative 'process_bills'
 require_relative 'helper'
 require_relative 'log_it'
+require_relative 'progress_it'
 
 def file_changed(chosen, field)
   field.text = chosen.filename ? chosen.filename : ''
@@ -44,6 +45,7 @@ bill_file.width_chars = bill_file.text.length
 button = Gtk::Button.new('Begin processing')
 
 progress = Gtk::ProgressBar.new
+ProgressIt.instance.bar = progress
 
 textview = Gtk::TextView.new
 textview.editable = false
