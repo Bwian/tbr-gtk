@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 files = Dir.entries(File.dirname(__FILE__)).select do |file|
   file =~ /^test_/
 end

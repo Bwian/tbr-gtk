@@ -64,6 +64,6 @@ class ProcessBills
     CreateFiles.archive(bill_file)
     
     @log.info("PDF report files can be found in #{cf.dir_full_root}.") 
-    @log.info("Telstra Billing Data Extract completed.") 
+    @log.info("Telstra billing data extract completed.") 
   end 
 end

@@ -17,3 +17,4 @@
 
 *.pdf
 /data/archive/*
+/coverage/*
