@@ -20,7 +20,7 @@ class CreateFiles
   	@invoice_month = Time.parse(invoice_date).strftime('%B %Y')
   	@dir_root = './data/' + invoice_date[0..5]	
   	FileUtils.rm_rf(@dir_root) if replace
-    raise IOError, "#{File.realdirpath(@dir_root)} already exists" if File.exist?(@dir_root)
+    raise IOError, "#{dir_full_root} already exists" if File.exist?(@dir_root)
   	Dir.mkdir(@dir_root)
   	@dir_summaries = "#{@dir_root}/summaries"
   	@dir_details = "#{@dir_root}/details"
@@ -38,6 +38,10 @@ class CreateFiles
   
   def service_totals(services)
   	create_service_totals(services)
+  end
+  
+  def dir_full_root
+    File.realdirpath(@dir_root)
   end
   
   def self.archive(bill_file)

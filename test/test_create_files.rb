@@ -31,6 +31,10 @@ class TestCreateFiles < MiniTest::Test
 		end
 	end
   
+  def test_dir_full_root
+    assert_equal(File.realdirpath(@cf.dir_root),@cf.dir_full_root)
+  end
+  
   def test_archive
     FileUtils.rm_rf('./data/bills*.csv')
     FileUtils.cp('./test/data/bills.csv', './data/bills.csv')
