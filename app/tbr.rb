@@ -5,8 +5,9 @@ require_relative 'log_it'
 require_relative 'progress_it'
 
 def file_changed(chosen, field)
-  field.text = chosen.filename ? chosen.filename : ''
+  field.text = chosen.filename if chosen.filename
   field.width_chars = field.text.length
+  field.select_region(0,0)
 end
 
 def dummy_menu(helper,window)
@@ -25,6 +26,7 @@ window.resize(400,400)
 
 chooser = Gtk::FileChooserButton.new(
   "Choose a Billing File", Gtk::FileChooser::ACTION_OPEN)
+chooser.current_folder = "#{helper.base_directory}/data"
 
 filter1 = Gtk::FileFilter.new
 filter1.name = "CSV Files"
@@ -93,7 +95,7 @@ end
 
 exit_mi = Gtk::MenuItem.new "Exit"
 exit_mi.signal_connect "activate" do
-    Gtk.main_quit
+  Gtk.main_quit
 end
 
 file_menu.append rebuild_mi
@@ -158,9 +160,9 @@ end
 button.signal_connect(:clicked) do |w|
   if !helper.check_directory_structure
     helper.do_error(window, "Error in directory structure: #{helper.base_directory}\nRebuild with 'File > Rebuild directory")
-  elsif !File.exists?(helper.config_path)
-    helper.do_error(window, "Missing configuration file: #{helper.config_path} \nInitialise with 'File > Initialise configuration'")
-  elsif !File.exists?(bill_file.text)
+  elsif !File.exists?(config_file)
+    helper.do_error(window, "Missing configuration file: #{config_file} \nInitialise with 'File > Initialise configuration'")
+  elsif File.directory?(bill_file.text) || !File.exists?(bill_file.text)
     helper.do_error(window, "Missing billing file: #{bill_file.text}")
   else
     textview.buffer.text = ''
@@ -195,5 +197,6 @@ mainbox.pack_start_defaults(vbox)
 
 window.add(mainbox)
 window.show_all
+button.grab_focus
 
 Gtk.main
