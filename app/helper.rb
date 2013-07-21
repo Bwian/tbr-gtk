@@ -71,12 +71,24 @@ class Helper
     response == Gtk::Dialog::RESPONSE_YES
   end
   
+  def do_about(window)
+    about = Gtk::AboutDialog.new
+    about.set_program_name "Telstra Bill Reporting"
+    about.set_version "1.0"
+    about.set_copyright "(c) Pyrrho Pty Ltd - 2013"
+    about.set_comments "Telstra Bill Reporting parses Telstra billing files and produces individual and summary service reports.\n\nPlease note this version supports Telstra On Line Billing Service technical specification version 6.4\n"
+    # about.set_website "www.pyrrho.com.au"
+    about.set_logo(Gdk::Pixbuf.new("./images/logo.jpg",150,60))
+    about.run
+    about.destroy
+  end  
+  
   def config_path
     "#{base_directory}/config/services.csv"
   end
   
   def bill_path
-    path = Dir.glob("#{base_directory}/data/*.csv").sort_by {|f| File.mtime(f)}.last
+    path = Dir.glob("#{base_directory}/data/*.{csv,CSV}").sort_by {|f| File.mtime(f)}.last
     path.nil? || path.empty? ? base_directory : path  
   end
   

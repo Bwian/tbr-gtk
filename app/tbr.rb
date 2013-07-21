@@ -31,6 +31,7 @@ chooser.current_folder = "#{helper.base_directory}/data"
 filter1 = Gtk::FileFilter.new
 filter1.name = "CSV Files"
 filter1.add_pattern('*.csv')
+filter1.add_pattern('*.CSV')
 chooser.add_filter(filter1) # 1st added will be the default
 
 filter2 = Gtk::FileFilter.new
@@ -68,6 +69,8 @@ file_menu = Gtk::Menu.new
 file_mi = Gtk::MenuItem.new "File"
 file_mi.set_submenu file_menu
 
+separator = Gtk::MenuItem.new nil
+
 rebuild_mi = Gtk::MenuItem.new "Rebuild directory structure"
 rebuild_mi.signal_connect "activate" do
   if helper.check_directory_structure
@@ -101,6 +104,7 @@ end
 file_menu.append rebuild_mi
 file_menu.append initialise_mi
 file_menu.append delete_mi
+file_menu.append separator
 file_menu.append exit_mi
 
 # Edit Menu
@@ -145,10 +149,23 @@ end
 review_menu.append logfile_mi
 review_menu.append configfile_mi
 
+# Help Menu
+help_menu = Gtk::Menu.new
+help_mi = Gtk::MenuItem.new "Help"
+help_mi.set_submenu help_menu
+
+about_mi = Gtk::MenuItem.new "About"
+about_mi.signal_connect "activate" do
+  helper.do_about(window)
+end
+
+help_menu.append about_mi
+
 mb = Gtk::MenuBar.new
 mb.append file_mi
 mb.append edit_mi
 mb.append review_mi
+mb.append help_mi
 
 config_file	= helper.config_path
 process_bills = ProcessBills.new
