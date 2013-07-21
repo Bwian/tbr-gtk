@@ -4,6 +4,8 @@ require_relative 'helper'
 require_relative 'log_it'
 require_relative 'progress_it'
 
+LOGFILE = './logs/telstra.log'
+
 def file_changed(chosen, field)
   field.text = chosen.filename if chosen.filename
   field.width_chars = field.text.length
@@ -15,7 +17,8 @@ def dummy_menu(helper,window)
 end
 
 helper = Helper.new
-LogIt.instance.to_file('./logs/telstra.log') # Initialise logging
+config_file	= helper.config_path
+LogIt.instance.to_file(LOGFILE) # Initialise logging
 replace = false  # Replace previous run's directory
 
 Dir.chdir(helper.base_directory)
@@ -81,12 +84,21 @@ rebuild_mi.signal_connect "activate" do
   end
 end
 
-initialise_mi = Gtk::MenuItem.new "Initialise configuration file"
-initialise_mi.signal_connect "activate" do
+init_config_mi = Gtk::MenuItem.new "Initialise configuration file"
+init_config_mi.signal_connect "activate" do
   if helper.do_yn(window,'OK to remove configuration file?')
     f = File.open(helper.config_path,'w')
     f.close
     helper.do_info(window,"Configuration file #{helper.config_path} set to zero length.  All services will be flagged as 'Unassigned'.")
+  end
+end
+
+init_log_mi = Gtk::MenuItem.new "Initialise logfile"
+init_log_mi.signal_connect "activate" do
+  if helper.do_yn(window,'OK to reset logfile?')
+    f = File.open(LOGFILE,'w')
+    f.close
+    helper.do_info(window,"Configuration file #{LOGFILE} set to zero length.")
   end
 end
 
@@ -102,7 +114,8 @@ exit_mi.signal_connect "activate" do
 end
 
 file_menu.append rebuild_mi
-file_menu.append initialise_mi
+file_menu.append init_config_mi
+file_menu.append init_log_mi
 file_menu.append delete_mi
 file_menu.append separator
 file_menu.append exit_mi
@@ -138,12 +151,12 @@ review_mi.set_submenu review_menu
 
 logfile_mi = Gtk::MenuItem.new "Review log file"
 logfile_mi.signal_connect "activate" do
-  dummy_menu(helper,window)
+  helper.do_file_review(window,'Log File Review',File.expand_path(LOGFILE))
 end
 
 configfile_mi = Gtk::MenuItem.new "Review configuration file"
 configfile_mi.signal_connect "activate" do
-  dummy_menu(helper,window)
+  helper.do_file_review(window,'Configuration File Review',config_file)
 end
 
 review_menu.append logfile_mi
@@ -167,7 +180,6 @@ mb.append edit_mi
 mb.append review_mi
 mb.append help_mi
 
-config_file	= helper.config_path
 process_bills = ProcessBills.new
 
 chooser.signal_connect('selection_changed') do |w|

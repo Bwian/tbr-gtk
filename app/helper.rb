@@ -71,6 +71,44 @@ class Helper
     response == Gtk::Dialog::RESPONSE_YES
   end
   
+  def do_file_review(window,heading,filename)
+    dialog = Gtk::Dialog.new(heading,
+                             window,
+                             Gtk::Dialog::MODAL,
+                             [Gtk::Stock::CLOSE, Gtk::Dialog::RESPONSE_NONE])
+  
+    label = Gtk::Label.new(filename)
+   
+    buffer = Gtk::TextBuffer.new
+    begin
+      file = File.open(filename,'r')
+      file.each_line do |line|
+        buffer.insert(buffer.end_iter,line)
+      end
+      file.close
+    rescue Errno::ENOENT
+      buffer.text = "Unable to open file: #{filename}"
+    end
+    
+    textview = Gtk::TextView.new(buffer)
+    textview.editable = false
+    textview.cursor_visible = false
+    textview.indent = 10
+
+    scrolledw = Gtk::ScrolledWindow.new
+    scrolledw.border_width = 5
+    scrolledw.add(textview)
+    scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
+
+    dialog.vbox.pack_start(label,false,false,5)
+    dialog.vbox.pack_start_defaults(scrolledw)
+    dialog.resize(800,600)
+    
+    dialog.show_all
+    dialog.run
+    dialog.destroy
+  end
+  
   def do_about(window)
     about = Gtk::AboutDialog.new
     about.set_program_name "Telstra Bill Reporting"
