@@ -42,7 +42,7 @@ class Helper
   
   def do_info(window,message)
     dialog = Gtk::MessageDialog.new(window, 
-                                    Gtk::Dialog::DESTROY_WITH_PARENT,
+                                    Gtk::Dialog::MODAL,
                                     Gtk::MessageDialog::INFO,
                                     Gtk::MessageDialog::BUTTONS_OK,
                                     message)
@@ -52,7 +52,7 @@ class Helper
 
   def do_error(window,message)
     dialog = Gtk::MessageDialog.new(window, 
-                                    Gtk::Dialog::DESTROY_WITH_PARENT,
+                                    Gtk::Dialog::MODAL,
                                     Gtk::MessageDialog::ERROR,
                                     Gtk::MessageDialog::BUTTONS_OK,
                                     message)
@@ -62,7 +62,7 @@ class Helper
   
   def do_yn(window,message)
     dialog = Gtk::MessageDialog.new(window, 
-                                    Gtk::Dialog::DESTROY_WITH_PARENT,
+                                    Gtk::Dialog::MODAL,
                                     Gtk::MessageDialog::ERROR,
                                     Gtk::MessageDialog::BUTTONS_YES_NO,
                                     message)
