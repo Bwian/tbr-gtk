@@ -109,6 +109,54 @@ class Helper
     dialog.destroy
   end
   
+  def do_config_review(window,heading,filename)
+    dialog = Gtk::Dialog.new(heading,
+                             window,
+                             Gtk::Dialog::MODAL,
+                             [Gtk::Stock::CLOSE, Gtk::Dialog::RESPONSE_NONE])
+  
+    label = Gtk::Label.new(filename)
+    
+		table_array = Array.new
+    file = File.new(filename)			
+		file.each_line do |line|
+			fields = line.split(',')
+      table_array << fields[0..3]
+    end
+    
+    table = Gtk::Table.new(table_array.size, 4, false)
+    table.row_spacings = 1
+    table.column_spacings = 1
+    options = Gtk::EXPAND|Gtk::FILL
+    
+    row = 0
+    table_array.each do |fields|
+      col = 0
+      fields.each do |field|
+        f = Gtk::Entry.new
+        f.text = field
+        f.width_chars = field.size
+        # f.signal_connect('clicked') { |w| puts "Button (#{w.label}) pressed" }
+        table.attach(f,col,col+1,row,row+1, options, options, 0, 0)
+        col += 1
+      end
+      row += 1      
+    end
+    
+    scrolledw = Gtk::ScrolledWindow.new
+    scrolledw.border_width = 5
+    scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
+    scrolledw.add_with_viewport(table)
+    
+    dialog.vbox.pack_start(label,false,false,5)
+    dialog.vbox.pack_start_defaults(scrolledw)
+    dialog.resize(800,600)
+    
+    dialog.show_all
+    dialog.run
+    dialog.destroy
+  end
+  
   def do_about(window)
     about = Gtk::AboutDialog.new
     about.set_program_name "Telstra Bill Reporting"
