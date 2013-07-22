@@ -19,18 +19,21 @@ class TestLogIt < MiniTest::Test
 		assert_equal(a,b)
 	end
 
-# 	Uncomment to test logging to STDOUT and STDERR
-
-# 	def test_to_stdout
-# 		@log.to_stdout
-# 		@log.warn("STDOUT - Hello World")
-# 	end
-# 	
-# 	def test_to_stderr
-# 		@log.to_stderr
-# 		@log.warn("STDERR - Hello World")
-# 	end	
-	
+  def test_to_stdout
+    if @@test_dialogs
+      puts ''
+      @log.to_stdout
+      @log.warn("STDOUT - Hello World")
+    end
+  end
+  
+  def test_to_stderr
+    if @@test_dialogs
+      puts ''
+      @log.to_stderr
+      @log.warn("STDERR - Hello World")
+    end
+  end  
 	
 	def test_to_file
 		fname = './test/test.log'
