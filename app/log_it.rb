@@ -7,6 +7,7 @@ class LogIt < Logger
 
 	def to_file(fname)
   	file = File.open(fname,'a')
+    file.sync = true
   	@logdev = Logger::LogDevice.new(file)
   end
   
