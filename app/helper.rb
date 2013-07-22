@@ -71,7 +71,7 @@ class Helper
     response == Gtk::Dialog::RESPONSE_YES
   end
   
-  def do_file_review(window,heading,filename)
+  def do_log_review(window,heading,filename)
     dialog = Gtk::Dialog.new(heading,
                              window,
                              Gtk::Dialog::MODAL,
@@ -117,57 +117,6 @@ class Helper
   
     label = Gtk::Label.new(filename)
     
-		table_array = Array.new
-    file = File.new(filename)			
-		file.each_line do |line|
-			fields = line.split(',')
-      table_array << fields[0..3]
-    end
-    
-    table = Gtk::Table.new(table_array.size, 4, false)
-    table.row_spacings = 1
-    table.column_spacings = 1
-    options = Gtk::EXPAND|Gtk::FILL
-    
-    row = 0
-    table_array.each do |fields|
-      col = 0
-      fields.each do |field|
-        f = Gtk::Entry.new
-        f.text = field
-        f.width_chars = field.size
-        f.signal_connect('activate') do |w| 
-          puts "Row #{row}, col #{col} = #{w.text}" 
-        end
-          
-        table.attach(f,col,col+1,row,row+1, options, options, 0, 0)
-        col += 1
-      end
-      row += 1      
-    end
-    
-    scrolledw = Gtk::ScrolledWindow.new
-    scrolledw.border_width = 5
-    scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
-    scrolledw.add_with_viewport(table)
-    
-    dialog.vbox.pack_start(label,false,false,5)
-    dialog.vbox.pack_start_defaults(scrolledw)
-    dialog.resize(800,600)
-    
-    dialog.show_all
-    dialog.run
-    dialog.destroy
-  end
-  
-  def do_config_tree(window,heading,filename)
-    dialog = Gtk::Dialog.new(heading,
-                             window,
-                             Gtk::Dialog::MODAL,
-                             [Gtk::Stock::CLOSE, Gtk::Dialog::RESPONSE_NONE])
-  
-    label = Gtk::Label.new(filename)
-    
     treestore = Gtk::TreeStore.new(String, String, String)
 
     services = Services.new
@@ -184,13 +133,17 @@ class Helper
       parent[0] = group.name
       group.each do |service|
         child = treestore.append(parent)
-        child[0] = service.service_number
+        phone = service.service_number
+        phone = "#{phone[0..1]} #{phone[2..5]} #{phone[6..9]}" if phone[0] == '0'
+        child[0] = phone
         child[1] = service.cost_centre
         child[2] = service.name
       end
     end
 
     view = Gtk::TreeView.new(treestore)
+    # view.enable_tree_lines = true
+    view.enable_grid_lines = Gtk::TreeView::GRID_LINES_BOTH
     view.selection.mode = Gtk::SELECTION_NONE
 
     cols = ['Group','CC','Name']

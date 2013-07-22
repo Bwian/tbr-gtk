@@ -152,12 +152,12 @@ review_mi.set_submenu review_menu
 
 logfile_mi = Gtk::MenuItem.new "Review log file"
 logfile_mi.signal_connect "activate" do
-  helper.do_file_review(window,'Log File Review',File.expand_path(LOGFILE))
+  helper.do_log_review(window,'Log File Review',File.expand_path(LOGFILE))
 end
 
 configfile_mi = Gtk::MenuItem.new "Review configuration file"
 configfile_mi.signal_connect "activate" do
-  helper.do_config_tree(window,'Configuration File Review',config_file)
+  helper.do_config_review(window,'Configuration File Review',config_file)
 end
 
 review_menu.append logfile_mi
