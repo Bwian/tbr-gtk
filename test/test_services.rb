@@ -36,6 +36,10 @@ class TestServices < MiniTest::Test
 		@services.delete('418501461')
 		assert_equal(1,@services.size)
 	end
+  
+  def test_name
+    assert_equal('Unassigned',@services.name)
+  end
 	
 	private
 	

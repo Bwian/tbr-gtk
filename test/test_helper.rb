@@ -48,4 +48,13 @@ class TestHelper < MiniTest::Test
     ENV["OCRA_EXECUTABLE"] = "#{root}/tbr.exe"
     assert_equal("#{root}/data/latest.csv",@helper.bill_path)
   end
+  
+  def test_dialogs
+    @helper.do_info(nil,'Test message')
+    @helper.do_error(nil,'Test message')
+    @helper.do_yn(nil,'Test message')
+    @helper.do_log_review(nil,'Review log file',LOGFILE)
+    @helper.do_config_review(nil,'Review config file',SERVICES)
+    @helper.do_about(nil)
+  end
 end
