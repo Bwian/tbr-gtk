@@ -1,3 +1,5 @@
+require 'csv'
+
 require_relative 'call_detail'
 require_relative 'call_type'
 require_relative 'groups'
@@ -18,11 +20,8 @@ class ParseFiles
 	OBR_SERVICE_NUMBER	= 6
 		
 	def self.map_services(groups,services,config_file)
-		begin
-			file = File.new(config_file)
-				
-			file.each_line do |line|
-				fields = line.split(',')
+    begin				
+			CSV.foreach(config_file) do |fields|
 				next if !valid_fields(fields)
 				
 				group = groups.group(fields[SERVICE_GROUP])
@@ -31,7 +30,7 @@ class ParseFiles
 				service.cost_centre = fields[SERVICE_CC]
 				group.add_service(service)
 			end
-      LogIt.instance.warn("Empty configuration file. All services will be classified as unassigned") if file.size == 0
+      LogIt.instance.warn("Empty configuration file. All services will be classified as unassigned") if File.size(config_file) == 0
 		rescue Errno::ENOENT
       message = "Error accessing configuration file: #{config_file}"
 			LogIt.instance.fatal(message)
