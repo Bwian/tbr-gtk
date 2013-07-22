@@ -1,4 +1,5 @@
 require 'gtk2'
+
 require_relative 'process_bills'
 require_relative 'helper'
 require_relative 'log_it'
@@ -156,7 +157,7 @@ end
 
 configfile_mi = Gtk::MenuItem.new "Review configuration file"
 configfile_mi.signal_connect "activate" do
-  helper.do_config_review(window,'Configuration File Review',config_file)
+  helper.do_config_tree(window,'Configuration File Review',config_file)
 end
 
 review_menu.append logfile_mi

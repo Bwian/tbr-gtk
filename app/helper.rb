@@ -136,7 +136,10 @@ class Helper
         f = Gtk::Entry.new
         f.text = field
         f.width_chars = field.size
-        # f.signal_connect('clicked') { |w| puts "Button (#{w.label}) pressed" }
+        f.signal_connect('activate') do |w| 
+          puts "Row #{row}, col #{col} = #{w.text}" 
+        end
+          
         table.attach(f,col,col+1,row,row+1, options, options, 0, 0)
         col += 1
       end
@@ -147,6 +150,61 @@ class Helper
     scrolledw.border_width = 5
     scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
     scrolledw.add_with_viewport(table)
+    
+    dialog.vbox.pack_start(label,false,false,5)
+    dialog.vbox.pack_start_defaults(scrolledw)
+    dialog.resize(800,600)
+    
+    dialog.show_all
+    dialog.run
+    dialog.destroy
+  end
+  
+  def do_config_tree(window,heading,filename)
+    dialog = Gtk::Dialog.new(heading,
+                             window,
+                             Gtk::Dialog::MODAL,
+                             [Gtk::Stock::CLOSE, Gtk::Dialog::RESPONSE_NONE])
+  
+    label = Gtk::Label.new(filename)
+    
+    treestore = Gtk::TreeStore.new(String, String, String)
+
+    services = Services.new
+    groups = Groups.new
+    config_file = './config/services.csv'
+
+    begin
+      ParseFiles.map_services(groups,services,config_file)
+    rescue IOError
+    end
+    
+    groups.each do |group|
+      parent = treestore.append(nil)
+      parent[0] = group.name
+      group.each do |service|
+        child = treestore.append(parent)
+        child[0] = service.service_number
+        child[1] = service.cost_centre
+        child[2] = service.name
+      end
+    end
+
+    view = Gtk::TreeView.new(treestore)
+    view.selection.mode = Gtk::SELECTION_NONE
+
+    cols = ['Group','CC','Name']
+    cols.each_index do |idx|
+      renderer = Gtk::CellRendererText.new
+      renderer.weight = Pango::FontDescription::WEIGHT_BOLD if idx == 0
+      col = Gtk::TreeViewColumn.new(cols[idx], renderer, :text => idx)
+      view.append_column(col)
+    end
+    
+    scrolledw = Gtk::ScrolledWindow.new
+    scrolledw.border_width = 5
+    scrolledw.set_policy(Gtk::POLICY_AUTOMATIC, Gtk::POLICY_ALWAYS)
+    scrolledw.add(view)
     
     dialog.vbox.pack_start(label,false,false,5)
     dialog.vbox.pack_start_defaults(scrolledw)
