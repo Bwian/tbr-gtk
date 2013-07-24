@@ -41,7 +41,7 @@ class LogIt < Logger
 	private
 		
   def initialize
-		super('/dev/null')
+		super(STDOUT)
     @textview = nil
     
     @severity = Hash.new
