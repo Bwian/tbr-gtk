@@ -185,13 +185,14 @@ class Helper
   end
   
   def bill_path
-    path = Dir.glob("#{base_directory}/data/*.{csv,CSV}").sort_by {|f| File.mtime(f)}.last
+    path = Dir["#{base_directory}/data/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
     path.nil? || path.empty? ? base_directory : path  
   end
   
   def base_directory
     exe = ENV["OCRA_EXECUTABLE"]
-    exe.nil? || exe.empty? ? Dir.pwd : File.dirname(exe) 
+    exe = exe.gsub(/\\/,'/') unless exe.nil?
+    exe.nil? || exe.empty? ? Dir.pwd : File.dirname(exe)
   end
   
 end

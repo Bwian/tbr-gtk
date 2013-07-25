@@ -32,6 +32,8 @@ class TestHelper < MiniTest::Test
   def test_base_directory
     ENV["OCRA_EXECUTABLE"] = '/tmp/tbr.exe'
     assert_equal('/tmp',@helper.base_directory)
+    ENV["OCRA_EXECUTABLE"] = '\tmp\tbr.exe'
+    assert_equal('/tmp',@helper.base_directory)
     ENV["OCRA_EXECUTABLE"] = ''
     assert_equal(Dir.pwd,@helper.base_directory)
     ENV["OCRA_EXECUTABLE"] = nil
