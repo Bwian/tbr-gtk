@@ -175,7 +175,7 @@ class Helper
     about.set_copyright "(c) Pyrrho Pty Ltd - 2013"
     about.set_comments "Telstra Bill Reporting parses Telstra billing files and produces individual and summary service reports.\n\nPlease note this version supports Telstra On Line Billing Service technical specification version 6.4\n"
     # about.set_website "www.pyrrho.com.au"
-    about.set_logo(Gdk::Pixbuf.new("./images/logo.jpg",150,60))
+    about.set_logo(Gdk::Pixbuf.new("./images/logo_small.jpg"))
     about.run
     about.destroy
   end  
