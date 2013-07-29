@@ -204,6 +204,10 @@ button.signal_connect(:clicked) do |w|
       LogIt.instance.error(e.message)
       LogIt.instance.error(e.backtrace.inspect)
       helper.do_error(window,e.message)
+    rescue ArgumentError => e
+      LogIt.instance.error(e.message)
+      LogIt.instance.error(e.backtrace.inspect)
+      helper.do_error(window,"Possible error in billing file #{bill_file.text}.  See log for details.")
     end 
     w.sensitive = true
   end
