@@ -2,6 +2,7 @@ require 'gtk2'
 
 require_relative 'process_bills'
 require_relative 'helper'
+require_relative 'configure'
 require_relative 'log_it'
 require_relative 'progress_it'
 
@@ -20,6 +21,7 @@ end
 helper = Helper.new
 services_file	= helper.services_path
 config_file = helper.config_path
+config = Configure.new(config_file)
 LogIt.instance.to_file(LOGFILE) # Initialise logging
 replace = false  # Replace previous run's directory
 
@@ -147,6 +149,7 @@ init_config_mi.signal_connect "activate" do
   if helper.do_yn(window,'OK to overwrite configuration file?')
     f = File.open(config_file,'w')
     f.close
+		config = Configure.new(config_file)
     helper.do_info(window,"Configuration file #{config_file} initialised.")
   end
 end

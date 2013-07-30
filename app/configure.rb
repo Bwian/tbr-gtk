@@ -13,7 +13,7 @@ class Configure
       log.warn("Syntax error in configuration file '#{@filename}'. Using default configuration.")
     end
     
-    @config = {:data => './data', :archive => './data/archive'} if @config.nil?
+    @config = {:data => './data', :archive => './data/archive'} unless @config
     
     @config.each_pair do |key,value|
       self.class.send(:define_method, key) { @config[key] }
