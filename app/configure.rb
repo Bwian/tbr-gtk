@@ -19,6 +19,8 @@ class Configure
       self.class.send(:define_method, key) { @config[key] }
       self.class.send(:define_method, "#{key}=") {|param| @config[key] = param }   
     end
+    
+    @clone = @config.clone
   end
   
   def update
@@ -27,5 +29,10 @@ class Configure
       file.write(sprintf("%-15s%s\n","#{key}:",value))
     end
     file.close
+    @clone = @config.clone
+  end
+  
+  def changed?
+    !@config.eql?(@clone)
   end
 end

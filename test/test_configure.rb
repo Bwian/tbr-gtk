@@ -31,8 +31,12 @@ class TestConfigure < MiniTest::Test
     newfile = './test/data/new.yaml'
     FileUtils.rm_rf(newfile)
     config = Configure.new(newfile)
+    refute(config.changed?,'Before change')
+    config.data = './datanew'
+    assert(config.changed?,'After change')
     config.update
-    assert_equal(52,File.size(newfile))
+    refute(config.changed?,'After update')
+    assert_equal(55,File.size(newfile))
     FileUtils.rm_rf(newfile)
   end
 end
