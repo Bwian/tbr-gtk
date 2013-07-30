@@ -45,6 +45,11 @@ class TestHelper < MiniTest::Test
     assert_equal('/tmp/config/services.csv',@helper.services_path)
   end
   
+  def test_config_path
+    ENV["OCRA_EXECUTABLE"] = '/tmp/tbr.exe'
+    assert_equal('/tmp/config/config.yaml',@helper.config_path)
+  end
+  
   def test_bill_path
     root = "#{Dir.pwd}/test"
     ENV["OCRA_EXECUTABLE"] = "#{root}/tbr.exe"

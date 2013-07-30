@@ -184,6 +184,10 @@ class Helper
     "#{base_directory}/config/services.csv"
   end
   
+  def config_path
+    "#{base_directory}/config/config.yaml"
+  end
+  
   def bill_path
     path = Dir["#{base_directory}/data/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
     path.nil? || path.empty? ? base_directory : path  

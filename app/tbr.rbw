@@ -19,6 +19,7 @@ end
 
 helper = Helper.new
 services_file	= helper.services_path
+config_file = helper.config_path
 LogIt.instance.to_file(LOGFILE) # Initialise logging
 replace = false  # Replace previous run's directory
 
@@ -73,8 +74,6 @@ file_menu = Gtk::Menu.new
 file_mi = Gtk::MenuItem.new "File"
 file_mi.set_submenu file_menu
 
-separator = Gtk::MenuItem.new nil
-
 rebuild_mi = Gtk::MenuItem.new "Rebuild directory structure"
 rebuild_mi.signal_connect "activate" do
   if helper.check_directory_structure
@@ -82,24 +81,6 @@ rebuild_mi.signal_connect "activate" do
   else
     helper.fix_directory_structure
     helper.do_info(window,'Directory structure rebuilt')
-  end
-end
-
-init_config_mi = Gtk::MenuItem.new "Initialise services configuration file"
-init_config_mi.signal_connect "activate" do
-  if helper.do_yn(window,'OK to overwrite services.csv?')
-    f = File.open(services_file,'w')
-    f.close
-    helper.do_info(window,"Services configuration file #{services_file} set to zero length.  All services will be flagged as 'Unassigned'.")
-  end
-end
-
-init_log_mi = Gtk::MenuItem.new "Initialise logfile"
-init_log_mi.signal_connect "activate" do
-  if helper.do_yn(window,'OK to reset logfile?')
-    f = File.open(LOGFILE,'w')
-    f.close
-    helper.do_info(window,"Configuration file #{LOGFILE} set to zero length.")
   end
 end
 
@@ -114,11 +95,11 @@ exit_mi.signal_connect "activate" do
   Gtk.main_quit
 end
 
+file_separator = Gtk::MenuItem.new nil
+
 file_menu.append rebuild_mi
-file_menu.append init_config_mi
-file_menu.append init_log_mi
 file_menu.append delete_mi
-file_menu.append separator
+file_menu.append file_separator
 file_menu.append exit_mi
 
 # Edit Menu
@@ -145,23 +126,66 @@ edit_menu.append cut_mi
 edit_menu.append copy_mi
 edit_menu.append paste_mi
 
-# Review Menu
-review_menu = Gtk::Menu.new
-review_mi = Gtk::MenuItem.new "Review"
-review_mi.set_submenu review_menu
-
-logfile_mi = Gtk::MenuItem.new "Review log file"
-logfile_mi.signal_connect "activate" do
-  helper.do_log_review(window,'Log File Review',File.expand_path(LOGFILE))
-end
+# Configuration Menu
+configuration_menu = Gtk::Menu.new
+configuration_mi = Gtk::MenuItem.new "Configuration"
+configuration_mi.set_submenu configuration_menu
 
 servicesfile_mi = Gtk::MenuItem.new "Review services file"
 servicesfile_mi.signal_connect "activate" do
   helper.do_services_review(window,'Services Configuration File Review', services_file)
 end
 
-review_menu.append logfile_mi
-review_menu.append servicesfile_mi
+import_services_mi = Gtk::MenuItem.new "Import services file"
+import_services_mi.signal_connect "activate" do
+	helper.do_info(window,"Import services file not yet implemented")
+	# helper.do_import_services(window,'Edit Configuration File', config_file)
+end
+
+init_config_mi = Gtk::MenuItem.new "Initialise configuration file"
+init_config_mi.signal_connect "activate" do
+  if helper.do_yn(window,'OK to overwrite configuration file?')
+    f = File.open(config_file,'w')
+    f.close
+    helper.do_info(window,"Configuration file #{config_file} initialised.")
+  end
+end
+
+configfile_mi = Gtk::MenuItem.new "Edit configuration file"
+configfile_mi.signal_connect "activate" do
+  helper.do_info(window,"Edit configuration file not yet implemented")
+	# helper.do_edit_config(window,'Edit Configuration File', config_file)
+end
+
+configuration_separator = Gtk::MenuItem.new nil
+
+configuration_menu.append servicesfile_mi
+configuration_menu.append import_services_mi
+configuration_menu.append configuration_separator
+configuration_menu.append init_config_mi
+configuration_menu.append configfile_mi
+
+# Logs Menu
+logs_menu = Gtk::Menu.new
+logs_mi = Gtk::MenuItem.new "Logs"
+logs_mi.set_submenu logs_menu
+
+logfile_mi = Gtk::MenuItem.new "Review log file"
+logfile_mi.signal_connect "activate" do
+  helper.do_log_review(window,'Log File Review',File.expand_path(LOGFILE))
+end
+
+init_log_mi = Gtk::MenuItem.new "Initialise logfile"
+init_log_mi.signal_connect "activate" do
+  if helper.do_yn(window,'OK to reset logfile?')
+    f = File.open(LOGFILE,'w')
+    f.close
+    helper.do_info(window,"Configuration file #{LOGFILE} set to zero length.")
+  end
+end
+
+logs_menu.append logfile_mi
+logs_menu.append init_log_mi
 
 # Help Menu
 help_menu = Gtk::Menu.new
@@ -178,7 +202,8 @@ help_menu.append about_mi
 mb = Gtk::MenuBar.new
 mb.append file_mi
 mb.append edit_mi
-mb.append review_mi
+mb.append configuration_mi
+mb.append logs_mi
 mb.append help_mi
 
 process_bills = ProcessBills.new
