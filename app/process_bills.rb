@@ -20,7 +20,7 @@ class ProcessBills
     @pb = ProgressIt.instance
   end
   
-  def run (config_file,bill_file,replace)
+  def run (services_file,bill_file,replace)
     @log.info("Starting Telstra Billing Data Extract")
 
     @log.info("Extracting Call Types from #{bill_file}")
@@ -30,8 +30,8 @@ class ProcessBills
     services = Services.new
     groups = Groups.new
 
-    @log.info("Mapping services from #{config_file}")
-    ParseFiles.map_services(groups,services,config_file)
+    @log.info("Mapping services from #{services_file}")
+    ParseFiles.map_services(groups,services,services_file)
     @log.info("Extracting billing data from #{bill_file}")
     invoice_date = ParseFiles.parse_bill_file(services,call_type,bill_file)
 

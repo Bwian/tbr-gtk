@@ -109,7 +109,7 @@ class Helper
     dialog.destroy
   end
   
-  def do_config_review(window,heading,filename)
+  def do_services_review(window,heading,filename)
     dialog = Gtk::Dialog.new(heading,
                              window,
                              Gtk::Dialog::MODAL,
@@ -121,10 +121,10 @@ class Helper
 
     services = Services.new
     groups = Groups.new
-    config_file = './config/services.csv'
+    services_file = services_path
 
     begin
-      ParseFiles.map_services(groups,services,config_file)
+      ParseFiles.map_services(groups,services,services_file)
     rescue IOError
     end
     
@@ -180,7 +180,7 @@ class Helper
     about.destroy
   end  
   
-  def config_path
+  def services_path
     "#{base_directory}/config/services.csv"
   end
   

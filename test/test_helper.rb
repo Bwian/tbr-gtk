@@ -40,15 +40,19 @@ class TestHelper < MiniTest::Test
     assert_equal(Dir.pwd,@helper.base_directory)
   end
   
-  def test_config_path
+  def test_services_path
     ENV["OCRA_EXECUTABLE"] = '/tmp/tbr.exe'
-    assert_equal('/tmp/config/services.csv',@helper.config_path)
+    assert_equal('/tmp/config/services.csv',@helper.services_path)
   end
   
   def test_bill_path
     root = "#{Dir.pwd}/test"
     ENV["OCRA_EXECUTABLE"] = "#{root}/tbr.exe"
     assert_equal("#{root}/data/latest.csv",@helper.bill_path)
+  end
+  
+  def test_import_services_file
+    flunk 'test_import_services_file'
   end
   
   def test_dialogs

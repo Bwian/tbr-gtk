@@ -5,11 +5,12 @@ require_relative 'log_it'
 
 # require 'debugger'; debugger
 
-BILL_FILE		= './data/telstra.csv'
-CONFIG_FILE	= './config/services.csv'
+BILL_FILE		  = './data/telstra.csv'
+SERVICES_FILE	= './config/services.csv'
+LOG_FILE      = './logs/telstra.log'
 
 helper = Helper.new
-LogIt.instance.to_file('./logs/telstra.log') # Initialise logging
+LogIt.instance.to_file(LOG_FILE) # Initialise logging
 
 if !helper.check_directory_structure && helper.yn("Rebuild directory structure in #{Dir.pwd}",'y')
   helper.fix_directory_structure
@@ -17,16 +18,16 @@ end
 
 exit if !helper.check_directory_structure  # Still no directory 
 
-if !File.exists?(CONFIG_FILE)
-  if helper.yn("Configuration file #{CONFIG_FILE} does not exist.  Create?","n")
-    f = File.open(CONFIG_FILE,'w')
+if !File.exists?(SERVICES_FILE)
+  if helper.yn("Services configuration file #{SERVICES_FILE} does not exist.  Create?","n")
+    f = File.open(SERVICES_FILE,'w')
     f.close
     puts 'Warning - all services will be classified as unassigned.'
-    log.warn("Configuration file #{CONFIG_FILE} created as zero length")
+    log.warn("Services configuration file #{SERVICES_FILE} created as zero length")
   else
     exit
   end
 end
 
 process_bills = ProcessBills.new
-process_bills.run(CONFIG_FILE,BILL_FILE,true)
+process_bills.run(SERVICES_FILE,BILL_FILE,true)

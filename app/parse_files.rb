@@ -19,9 +19,9 @@ class ParseFiles
 	DH_INVOICE_DATE			= 2
 	OBR_SERVICE_NUMBER	= 6
 		
-	def self.map_services(groups,services,config_file)
+	def self.map_services(groups,services,services_file)
     begin				
-			CSV.foreach(config_file) do |fields|
+			CSV.foreach(services_file) do |fields|
 				next if !valid_fields(fields)
 				
 				group = groups.group(fields[SERVICE_GROUP])
@@ -30,9 +30,9 @@ class ParseFiles
 				service.cost_centre = fields[SERVICE_CC]
 				group.add_service(service)
 			end
-      LogIt.instance.warn("Empty configuration file. All services will be classified as unassigned") if File.size(config_file) == 0
+      LogIt.instance.warn("Empty services file. All services will be classified as unassigned") if File.size(services_file) == 0
 		rescue Errno::ENOENT
-      message = "Error accessing configuration file: #{config_file}"
+      message = "Error accessing services file: #{services_file}"
 			LogIt.instance.fatal(message)
       raise IOError, message
 		end
@@ -76,7 +76,7 @@ class ParseFiles
 		return false if fields.size == 0
 		
 		if fields.size < 4
-			LogIt.instance.warn("Invalid configuration record: - #{fields.to_s}")
+			LogIt.instance.warn("Invalid services.csv record: - #{fields.to_s}")
 			return false
 		end
 		

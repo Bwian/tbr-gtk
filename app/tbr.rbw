@@ -18,7 +18,7 @@ def dummy_menu(helper,window)
 end
 
 helper = Helper.new
-config_file	= helper.config_path
+services_file	= helper.services_path
 LogIt.instance.to_file(LOGFILE) # Initialise logging
 replace = false  # Replace previous run's directory
 
@@ -85,12 +85,12 @@ rebuild_mi.signal_connect "activate" do
   end
 end
 
-init_config_mi = Gtk::MenuItem.new "Initialise configuration file"
+init_config_mi = Gtk::MenuItem.new "Initialise services configuration file"
 init_config_mi.signal_connect "activate" do
-  if helper.do_yn(window,'OK to remove configuration file?')
-    f = File.open(helper.config_path,'w')
+  if helper.do_yn(window,'OK to overwrite services.csv?')
+    f = File.open(services_file,'w')
     f.close
-    helper.do_info(window,"Configuration file #{helper.config_path} set to zero length.  All services will be flagged as 'Unassigned'.")
+    helper.do_info(window,"Services configuration file #{services_file} set to zero length.  All services will be flagged as 'Unassigned'.")
   end
 end
 
@@ -155,13 +155,13 @@ logfile_mi.signal_connect "activate" do
   helper.do_log_review(window,'Log File Review',File.expand_path(LOGFILE))
 end
 
-configfile_mi = Gtk::MenuItem.new "Review configuration file"
-configfile_mi.signal_connect "activate" do
-  helper.do_config_review(window,'Configuration File Review',config_file)
+servicesfile_mi = Gtk::MenuItem.new "Review services file"
+servicesfile_mi.signal_connect "activate" do
+  helper.do_services_review(window,'Services Configuration File Review', services_file)
 end
 
 review_menu.append logfile_mi
-review_menu.append configfile_mi
+review_menu.append servicesfile_mi
 
 # Help Menu
 help_menu = Gtk::Menu.new
@@ -190,15 +190,15 @@ end
 button.signal_connect(:clicked) do |w|
   if !helper.check_directory_structure
     helper.do_error(window, "Error in directory structure: #{helper.base_directory}\nRebuild with 'File > Rebuild directory")
-  elsif !File.exists?(config_file)
-    helper.do_error(window, "Missing configuration file: #{config_file} \nInitialise with 'File > Initialise configuration'")
+  elsif !File.exists?(services_file)
+    helper.do_error(window, "Missing configuration file: #{services_file} \nInitialise with 'File > Initialise configuration'")
   elsif File.directory?(bill_file.text) || !File.exists?(bill_file.text)
     helper.do_error(window, "Missing billing file: #{bill_file.text}")
   else
     textview.buffer.text = ''
     w.sensitive = false 
     begin
-      process_bills.run(config_file,bill_file.text,replace)
+      process_bills.run(services_file,bill_file.text,replace)
       helper.do_info(window,"Processing billing file finished")
     rescue IOError => e
       LogIt.instance.error(e.message)
