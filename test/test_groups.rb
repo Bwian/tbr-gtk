@@ -29,4 +29,12 @@ class TestGroups < MiniTest::Test
 		end
 		assert_equal(2,count)
 	end
+  
+  def test_each
+    @groups.group('Brian')
+    @groups.each do |group|
+      assert_equal(Group,group.class)
+    end
+  end
+  
 end

@@ -20,6 +20,6 @@ class Groups
   end 
   
   def each(&blk)
-  	@groups.each_value(&blk)
+  	Hash[@groups.sort].each_value(&blk)
   end 
 end
