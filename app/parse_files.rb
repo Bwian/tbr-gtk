@@ -33,7 +33,7 @@ class ParseFiles
       LogIt.instance.warn("Empty services file. All services will be classified as unassigned") if File.size(services_file) == 0
 		rescue Errno::ENOENT
       message = "Error accessing services file: #{services_file}"
-			LogIt.instance.fatal(message)
+			LogIt.instance.error(message)
       raise IOError, message
 		end
 	end

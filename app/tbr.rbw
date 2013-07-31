@@ -22,7 +22,8 @@ helper = Helper.new
 services_file	= helper.services_path
 config_file = helper.config_path
 config = Configure.new(config_file)
-LogIt.instance.to_file(LOGFILE) # Initialise logging
+log = LogIt.instance
+log.to_file(LOGFILE) # Initialise logging
 replace = false  # Replace previous run's directory
 
 Dir.chdir(helper.base_directory)
@@ -62,7 +63,7 @@ textview = Gtk::TextView.new
 textview.editable = false
 textview.cursor_visible = false
 textview.indent = 10
-LogIt.instance.textview = textview
+log.textview = textview
 
 scrolledw = Gtk::ScrolledWindow.new
 scrolledw.border_width = 5
@@ -218,23 +219,26 @@ end
 button.signal_connect(:clicked) do |w|
   if !helper.check_directory_structure
     helper.do_error(window, "Error in directory structure: #{helper.base_directory}\nRebuild with 'File > Rebuild directory")
-  elsif !File.exists?(services_file)
-    helper.do_error(window, "Missing configuration file: #{services_file} \nInitialise with 'File > Initialise configuration'")
   elsif File.directory?(bill_file.text) || !File.exists?(bill_file.text)
     helper.do_error(window, "Missing billing file: #{bill_file.text}")
   else
-    textview.buffer.text = ''
+		if !File.exists?(services_file)
+		  f = File.open(services_file,'w')
+			f.close
+		end
+			
+		textview.buffer.text = ''
     w.sensitive = false 
     begin
       process_bills.run(services_file,bill_file.text,replace)
       helper.do_info(window,"Processing billing file finished")
     rescue IOError => e
-      LogIt.instance.error(e.message)
-      LogIt.instance.error(e.backtrace.inspect)
+      log.error(e.message)
+      log.error(e.backtrace.inspect)
       helper.do_error(window,e.message)
     rescue ArgumentError => e
-      LogIt.instance.error(e.message)
-      LogIt.instance.error(e.backtrace.inspect)
+      log.error(e.message)
+      log.error(e.backtrace.inspect)
       helper.do_error(window,"Possible error in billing file #{bill_file.text}.  See log for details.")
     end 
     w.sensitive = true

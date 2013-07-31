@@ -122,10 +122,15 @@ class Helper
     services = Services.new
     groups = Groups.new
     services_file = services_path
-
+    log = LogIt.instance
+    
     begin
       ParseFiles.map_services(groups,services,services_file)
     rescue IOError
+    rescue ArgumentError => e
+      log.error(e.message)
+      log.error(e.backtrace.inspect)
+      do_error(window,"Error in services file #{services_file}.  See log for details.")
     end
     
     groups.each do |group|
