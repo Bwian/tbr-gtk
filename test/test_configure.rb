@@ -36,7 +36,7 @@ class TestConfigure < MiniTest::Test
     assert(config.changed?,'After change')
     config.update
     refute(config.changed?,'After update')
-    assert_equal(55,File.size(newfile))
+    assert_equal(57,File.size(newfile))
     FileUtils.rm_rf(newfile)
   end
 end

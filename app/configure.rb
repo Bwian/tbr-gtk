@@ -26,7 +26,7 @@ class Configure
   def update
     file = File.open(@filename,'w')
     @config.each_pair do |key,value|
-      file.write(sprintf("%-15s%s\n","#{key}:",value))
+      file.write(sprintf("%-15s:%s\n",key,value))
     end
     file.close
     @clone = @config.clone
