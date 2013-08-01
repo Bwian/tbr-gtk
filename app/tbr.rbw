@@ -20,10 +20,14 @@ end
 
 helper = Helper.new
 services_file	= helper.services_path
+
 config_file = helper.config_path
-config = Configure.new(config_file)
+config = Configure.instance
+config.file = config_file
+
 log = LogIt.instance
 log.to_file(LOGFILE) # Initialise logging
+
 replace = false  # Replace previous run's directory
 
 Dir.chdir(helper.base_directory)
@@ -150,7 +154,7 @@ init_config_mi.signal_connect "activate" do
   if helper.do_yn(window,'OK to overwrite configuration file?')
     f = File.open(config_file,'w')
     f.close
-		config = Configure.new(config_file)
+		config.file = config_file
     helper.do_info(window,"Configuration file #{config_file} initialised.")
   end
 end
