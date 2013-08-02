@@ -7,12 +7,13 @@ class TestCreateFiles < MiniTest::Test
   def setup
   	FileUtils.rm_rf('./data/201304')
   	@cf = CreateFiles.new('20130418',false) 
-    Configure.instance.file = nil  
+    @config = Configure.instance
+    @config.file = nil  
   end
 
 	def teardown
     FileUtils.rm_rf('./data/201304')
-    Configure.instance.file = nil   
+    @config.file = nil   
   end
   
 	def test_accessors
@@ -48,7 +49,12 @@ class TestCreateFiles < MiniTest::Test
   end
   
   def test_archive_invalid_directory 
-    flunk 'TODO: test_archive_invalid_directory'
+    @config.archive = './data/missingarchive'
+    FileUtils.rm_rf('./data/bills*.csv')
+    FileUtils.cp('./test/data/bills.csv', './data/bills.csv')
+    assert_raises IOError do
+      CreateFiles.archive('./data/bills.csv')
+    end
   end
 	
 	# TODO: test file creation methods

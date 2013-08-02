@@ -49,7 +49,14 @@ class CreateFiles
   
   def self.archive(bill_file)
     to_file = "#{Configure.instance.archive}/#{Time.now.strftime('%Y%m%d.%H%M%S.csv')}"
-    FileUtils.mv(bill_file,to_file)
+    
+    begin
+      FileUtils.mv(bill_file,to_file)
+    rescue Errno::ENOENT
+      message = "Error creating archive file: #{to_file}.  Check configuration."
+			LogIt.instance.error(message)
+      raise IOError, message
+    end
     LogIt.instance.info("Billing file archived to #{File.realdirpath(to_file)}")
   end
   
