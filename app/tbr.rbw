@@ -143,6 +143,11 @@ servicesfile_mi.signal_connect "activate" do
   helper.do_services_review(window,'Services Configuration File Review', services_file)
 end
 
+init_services_mi = Gtk::MenuItem.new "Initialise services file"
+init_services_mi.signal_connect "activate" do
+  helper.initialise_config(window,'services',services_file)
+end
+
 import_services_mi = Gtk::MenuItem.new "Import services file"
 import_services_mi.signal_connect "activate" do
 	helper.do_info(window,"Import services file not yet implemented")
@@ -151,12 +156,7 @@ end
 
 init_config_mi = Gtk::MenuItem.new "Initialise configuration file"
 init_config_mi.signal_connect "activate" do
-  if helper.do_yn(window,'OK to overwrite configuration file?')
-    f = File.open(config_file,'w')
-    f.close
-		config.file = config_file
-    helper.do_info(window,"Configuration file #{config_file} initialised.")
-  end
+  helper.initialise_config(window,'configuration',config_file)
 end
 
 configfile_mi = Gtk::MenuItem.new "Edit configuration file"
@@ -168,6 +168,7 @@ end
 configuration_separator = Gtk::MenuItem.new nil
 
 configuration_menu.append servicesfile_mi
+configuration_menu.append init_services_mi
 configuration_menu.append import_services_mi
 configuration_menu.append configuration_separator
 configuration_menu.append init_config_mi

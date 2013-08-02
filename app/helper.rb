@@ -1,4 +1,5 @@
 require 'gtk2'
+require_relative 'configure'
 
 class Helper
   
@@ -204,4 +205,12 @@ class Helper
     exe.nil? || exe.empty? ? Dir.pwd : File.dirname(exe)
   end
   
+  def initialise_config(window,type,filename)
+    if do_yn(window,"OK to overwrite #{type} file?")
+      f = File.open(filename,'w')
+      f.close
+  		Configure.instance.file = filename
+      do_info(window,"#{type.capitalize} file #{filename} initialised.")
+    end
+  end
 end
