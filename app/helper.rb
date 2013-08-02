@@ -30,6 +30,25 @@ class Helper
     Dir.chdir(root)
   end
   
+  def services_path
+    "#{base_directory}/config/services.csv"
+  end
+  
+  def config_path
+    "#{base_directory}/config/config.yaml"
+  end
+  
+  def bill_path
+    path = Dir["#{Configure.instance.data}/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
+    path.nil? || path.empty? ? Configure.instance.data : path  
+  end
+  
+  def base_directory
+    exe = ENV["OCRA_EXECUTABLE"]
+    exe = exe.gsub(/\\/,'/') unless exe.nil?
+    exe.nil? || exe.empty? ? Dir.pwd : File.dirname(exe)
+  end
+  
   def yn(prompt,default)
     ans = 'x'
     while !(/[yn]/ =~ ans)
@@ -40,6 +59,8 @@ class Helper
       
     ans == 'y'
   end
+  
+  # Dialog helpers
   
   def do_info(window,message)
     dialog = Gtk::MessageDialog.new(window, 
@@ -185,25 +206,6 @@ class Helper
     about.run
     about.destroy
   end  
-  
-  def services_path
-    "#{base_directory}/config/services.csv"
-  end
-  
-  def config_path
-    "#{base_directory}/config/config.yaml"
-  end
-  
-  def bill_path
-    path = Dir["#{base_directory}/data/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
-    path.nil? || path.empty? ? base_directory : path  
-  end
-  
-  def base_directory
-    exe = ENV["OCRA_EXECUTABLE"]
-    exe = exe.gsub(/\\/,'/') unless exe.nil?
-    exe.nil? || exe.empty? ? Dir.pwd : File.dirname(exe)
-  end
   
   def initialise_config(window,type,filename)
     if do_yn(window,"OK to overwrite #{type} file?")

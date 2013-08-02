@@ -34,11 +34,11 @@ Dir.chdir(helper.base_directory)
 
 window = Gtk::Window.new("Telstra Billing Reporter")
 window.signal_connect('destroy') { Gtk.main_quit }
-window.resize(400,400)
+window.resize(600,400)
 
 chooser = Gtk::FileChooserButton.new(
   "Choose a Billing File", Gtk::FileChooser::ACTION_OPEN)
-chooser.current_folder = "#{helper.base_directory}/data"
+chooser.current_folder = "#{config.data}"
 
 filter1 = Gtk::FileFilter.new
 filter1.name = "CSV Files"
@@ -55,7 +55,7 @@ input_label = Gtk::Label.new
 input_label.text = 'File path:'
 
 bill_file = Gtk::Entry.new
-bill_file.text = helper.bill_path
+bill_file.text = File.realdirpath(helper.bill_path)
 bill_file.width_chars = bill_file.text.length
 
 button = Gtk::Button.new('Begin processing')

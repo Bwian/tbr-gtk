@@ -1,15 +1,18 @@
 require 'minitest/autorun'
 require 'fileutils'
 require_relative '../app/create_files'
+require_relative '../app/configure'
 
 class TestCreateFiles < MiniTest::Test
   def setup
   	FileUtils.rm_rf('./data/201304')
-  	@cf = CreateFiles.new('20130418',false)   
+  	@cf = CreateFiles.new('20130418',false) 
+    Configure.instance.file = nil  
   end
 
 	def teardown
-    FileUtils.rm_rf('./data/201304')   
+    FileUtils.rm_rf('./data/201304')
+    Configure.instance.file = nil   
   end
   
 	def test_accessors
@@ -42,6 +45,10 @@ class TestCreateFiles < MiniTest::Test
     assert(Dir.glob('./data/bills*.csv').empty?)  
     assert(!Dir.glob('./data/archive/bills*.csv').empty?)  
     FileUtils.rm_rf('./data/archive/bills*.csv')   
+  end
+  
+  def test_archive_invalid_directory 
+    flunk 'TODO: test_archive_invalid_directory'
   end
 	
 	# TODO: test file creation methods

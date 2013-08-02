@@ -7,6 +7,10 @@ class TestConfigure < MiniTest::Test
     @config.file = './test/data/config.yaml'
   end
 
+  def teardown
+    @config.file = nil  # reset configuration for subsequent tests
+  end
+  
   def test_accessors      
     assert_equal('./DATA',@config.data)
     assert_equal('./DATA/archive',@config.archive)

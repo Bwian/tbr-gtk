@@ -2,11 +2,17 @@ require 'minitest/autorun'
 require'fileutils'
  
 require_relative '../app/helper'
+require_relative '../app/configure'
 
 class TestHelper < MiniTest::Test 
   
   def setup
     @helper = Helper.new
+    Configure.instance.file = './test/data/test.yaml'
+  end
+  
+  def teardown
+    Configure.instance.file = nil  # reset configuration for subsequent tests
   end
   
   def test_correct_directory_structure
@@ -53,11 +59,15 @@ class TestHelper < MiniTest::Test
   def test_bill_path
     root = "#{Dir.pwd}/test"
     ENV["OCRA_EXECUTABLE"] = "#{root}/tbr.exe"
-    assert_equal("#{root}/data/latest.csv",@helper.bill_path)
+    assert_equal("./test/data/latest.csv",@helper.bill_path)
+  end
+  
+  def test_initialise_config
+    flunk 'TODO: test_initialise_config'
   end
   
   def test_import_services_file
-    flunk 'test_import_services_file'
+    flunk 'TODO: test_import_services_file'
   end
   
   def test_dialogs
