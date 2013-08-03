@@ -13,8 +13,8 @@ class Helper
     DIRECTORY_STRUCTURE.each do |dir|
       dname = "./#{dir.join('/')}"
       return false unless Dir.exists?(dname)
-    end  
-    true
+    end 
+    Dir.exists?(Configure.instance.archive) 
   end
   
   def fix_directory_structure

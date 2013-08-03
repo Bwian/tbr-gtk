@@ -8,11 +8,12 @@ class TestHelper < MiniTest::Test
   
   def setup
     @helper = Helper.new
-    Configure.instance.file = './test/data/test.yaml'
+    @config = Configure.instance
+    @config.file = './test/data/test.yaml'
   end
   
   def teardown
-    Configure.instance.file = nil  # reset configuration for subsequent tests
+    @config.file = nil  # reset configuration for subsequent tests
   end
   
   def test_correct_directory_structure
@@ -25,7 +26,13 @@ class TestHelper < MiniTest::Test
     Dir.chdir('../')
   end
   
+  def test_invalid_archive_directory
+    @config.archive = './data/missing'
+    refute(@helper.check_directory_structure)
+  end
+  
   def test_fix_directory_structure
+    @config.archive = './data/archive'
     FileUtils.rm_rf('./tmp')
     Dir.mkdir('./tmp')
     Dir.chdir('./tmp')
