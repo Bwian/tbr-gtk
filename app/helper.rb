@@ -18,16 +18,12 @@ class Helper
   end
   
   def fix_directory_structure
-    root = Dir.getwd
-    DIRECTORY_STRUCTURE.each do |dir|
-      Dir.chdir(root)
-      dir.each do |sub|
-        subname = "./#{sub}"
-        Dir.mkdir(subname) unless Dir.exists?(subname)
-        Dir.chdir(subname)
-      end
+    build_directory(DIRECTORY_STRUCTURE)
+    
+    archive = Configure.instance.archive
+    unless Dir.exists?(archive)
+      build_directory([File.realdirpath(archive).split('/')])
     end
-    Dir.chdir(root)
   end
   
   def services_path
@@ -214,5 +210,20 @@ class Helper
   		Configure.instance.file = filename
       do_info(window,"#{type.capitalize} file #{filename} initialised.")
     end
+  end
+  
+  private
+  
+  def build_directory(dirs)
+    root = Dir.getwd
+    dirs.each do |dir|
+      Dir.chdir(root)
+      dir.each do |sub|
+        subname = "./#{sub}"
+        Dir.mkdir(subname) unless Dir.exists?(subname)
+        Dir.chdir(subname)
+      end
+    end
+    Dir.chdir(root)
   end
 end

@@ -42,6 +42,15 @@ class TestHelper < MiniTest::Test
     FileUtils.rm_rf('./tmp')
   end
   
+  def test_fix_archive
+    @config.data = './data'
+    @config.archive = './test/archive'
+    FileUtils.rm_rf(@config.archive)
+    @helper.fix_directory_structure
+    assert(@helper.check_directory_structure)
+    FileUtils.rm_rf(@config.archive)
+  end
+  
   def test_base_directory
     ENV["OCRA_EXECUTABLE"] = '/tmp/tbr.exe'
     assert_equal('/tmp',@helper.base_directory)
