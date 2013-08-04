@@ -1,29 +1,25 @@
 require 'gtk2'
+require 'fileutils'
 require_relative 'configure'
 
 class Helper
   
   DIRECTORY_STRUCTURE = [
-    ['config'],
-    ['data','archive'],
-    ['logs']
+    './config',
+    './data/archive',
+    './logs'
   ]
   
   def check_directory_structure
     DIRECTORY_STRUCTURE.each do |dir|
-      dname = "./#{dir.join('/')}"
-      return false unless Dir.exists?(dname)
+      return false unless Dir.exists?(dir)
     end 
     Dir.exists?(Configure.instance.archive) 
   end
   
   def fix_directory_structure
     build_directory(DIRECTORY_STRUCTURE)
-    
-    archive = Configure.instance.archive
-    unless Dir.exists?(archive)
-      build_directory([File.realdirpath(archive).split('/')])
-    end
+    build_directory([Configure.instance.archive])
   end
   
   def services_path
@@ -215,15 +211,9 @@ class Helper
   private
   
   def build_directory(dirs)
-    root = Dir.getwd
     dirs.each do |dir|
-      Dir.chdir(root)
-      dir.each do |sub|
-        subname = "./#{sub}"
-        Dir.mkdir(subname) unless Dir.exists?(subname)
-        Dir.chdir(subname)
-      end
+      FileUtils.mkpath(dir)
     end
-    Dir.chdir(root)
   end
+  
 end
