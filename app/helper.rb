@@ -1,6 +1,7 @@
 require 'gtk2'
 require 'fileutils'
 require_relative 'configure'
+require_relative 'log_it'
 
 class Helper
   
@@ -39,6 +40,14 @@ class Helper
     exe = ENV["OCRA_EXECUTABLE"]
     exe = exe.gsub(/\\/,'/') unless exe.nil?
     exe.nil? || exe.empty? ? Dir.pwd : File.dirname(exe)
+  end
+  
+  def init_config(type,filename)
+    f = File.open(filename,'w')
+    f.close
+		Configure.instance.file = filename
+    message = "#{type.capitalize} file #{filename} initialised."
+    LogIt.instance.info(message)
   end
   
   def yn(prompt,default)
@@ -161,7 +170,6 @@ class Helper
     end
 
     view = Gtk::TreeView.new(treestore)
-    # view.enable_tree_lines = true
     view.enable_grid_lines = Gtk::TreeView::GRID_LINES_BOTH
     view.selection.mode = Gtk::SELECTION_NONE
 
@@ -201,10 +209,8 @@ class Helper
   
   def initialise_config(window,type,filename)
     if do_yn(window,"OK to overwrite #{type} file?")
-      f = File.open(filename,'w')
-      f.close
-  		Configure.instance.file = filename
-      do_info(window,"#{type.capitalize} file #{filename} initialised.")
+      init_config(type,filename)
+      do_info(window,message)
     end
   end
   

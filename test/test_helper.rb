@@ -5,11 +5,12 @@ require_relative '../app/helper'
 require_relative '../app/configure'
 
 class TestHelper < MiniTest::Test 
+  CONFIG_FILE = './test/data/test.yaml'
   
   def setup
     @helper = Helper.new
     @config = Configure.instance
-    @config.file = './test/data/test.yaml'
+    @config.file = CONFIG_FILE
   end
   
   def teardown
@@ -75,11 +76,20 @@ class TestHelper < MiniTest::Test
   def test_bill_path
     root = "#{Dir.pwd}/test"
     ENV["OCRA_EXECUTABLE"] = "#{root}/tbr.exe"
-    assert_equal("./test/data/latest.csv",@helper.bill_path)
+    FileUtils.touch('./test/data/latest.csv')
+    assert_equal('./test/data/latest.csv',@helper.bill_path)
   end
   
   def test_initialise_config
-    flunk 'TODO: test_initialise_config'
+		fname = './test/config.test'
+		FileUtils.cp('./test/data/config.yaml',fname)
+    @config.file = fname
+    assert_equal('./DATA',@config.data)
+    @helper.init_config('test',fname)	
+    assert_equal('./data',@config.data)	
+		assert(File.size(fname)== 0)
+    FileUtils.rm_rf(fname)
+    @config.file = CONFIG_FILE
   end
   
   def test_import_services_file
