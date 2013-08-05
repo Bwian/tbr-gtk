@@ -3,6 +3,8 @@ require'fileutils'
  
 require_relative '../app/helper'
 require_relative '../app/configure'
+require_relative '../app/groups'
+require_relative '../app/services'
 
 class TestHelper < MiniTest::Test 
   CONFIG_FILE = './test/data/test.yaml'
@@ -84,16 +86,33 @@ class TestHelper < MiniTest::Test
 		fname = './test/config.test'
 		FileUtils.cp('./test/data/config.yaml',fname)
     @config.file = fname
+    
     assert_equal('./DATA',@config.data)
     @helper.init_config('test',fname)	
     assert_equal('./data',@config.data)	
 		assert(File.size(fname)== 0)
+    
     FileUtils.rm_rf(fname)
     @config.file = CONFIG_FILE
   end
   
-  def test_import_services_file
-    flunk 'TODO: test_import_services_file'
+  def test_import_services
+  	ENV["OCRA_EXECUTABLE"] = './tmp/tbr.exe' 
+    config_path = './tmp/config'
+    FileUtils.mkpath(config_path)  
+    FileUtils.cp('./test/data/services.csv',config_path)
+    
+    assert_equal(14,count_services(config_path))
+    @helper.import_services("./test/data/new.csv")
+    assert_equal(3,count_services(config_path))
+    
+    FileUtils.rm_rf('./tmp')
+  end
+  
+  def test_import_invalid_services
+    assert_raises IOError do
+      @helper.import_services("./test/data/missing.csv")
+    end
   end
   
   def test_dialogs
@@ -105,5 +124,14 @@ class TestHelper < MiniTest::Test
       @helper.do_config_review(nil,'Review config file',SERVICES)
       @helper.do_about(nil)
     end
+  end
+  
+  private
+  
+  def count_services(config_path)
+  	services = Services.new
+		groups = Groups.new
+    ParseFiles.map_services(groups,services,"./tmp/config/services.csv")
+    services.size
   end
 end

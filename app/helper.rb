@@ -50,6 +50,19 @@ class Helper
     LogIt.instance.info(message)
   end
   
+  def import_services(fname)
+  	services = Services.new
+		groups = Groups.new
+    begin   	
+      ParseFiles.map_services(groups,services,fname)
+      FileUtils.cp(fname,services_path)
+    rescue Errno::ENOENT
+      raise IOError, "Services configuration file #{services_path} not found."
+    end
+    
+    raise ArgumentError("Services file invalid or empty.  #{fname} not installed as services.csv") if services.size == 0
+  end
+  
   def yn(prompt,default)
     ans = 'x'
     while !(/[yn]/ =~ ans)
