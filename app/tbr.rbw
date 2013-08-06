@@ -36,20 +36,9 @@ window = Gtk::Window.new("Telstra Billing Reporter")
 window.signal_connect('destroy') { Gtk.main_quit }
 window.resize(600,400)
 
-chooser = Gtk::FileChooserButton.new(
-  "Choose a Billing File", Gtk::FileChooser::ACTION_OPEN)
+chooser = Gtk::FileChooserButton.new("Select a Billing File", Gtk::FileChooser::ACTION_OPEN)
 chooser.current_folder = "#{config.data}"
-
-filter1 = Gtk::FileFilter.new
-filter1.name = "CSV Files"
-filter1.add_pattern('*.csv')
-filter1.add_pattern('*.CSV')
-chooser.add_filter(filter1) # 1st added will be the default
-
-filter2 = Gtk::FileFilter.new
-filter2.name = "All Files"
-filter2.add_pattern('*')
-chooser.add_filter(filter2)
+helper.csv_filters(chooser)
 
 input_label = Gtk::Label.new
 input_label.text = 'File path:'
@@ -150,8 +139,12 @@ end
 
 import_services_mi = Gtk::MenuItem.new "Import services file"
 import_services_mi.signal_connect "activate" do
-	helper.do_info(window,"Import services file not yet implemented")
-	# helper.do_import_services(window,'Edit Configuration File', config_file)
+	begin
+		helper.do_is(window)
+		# helper.do_import_services(window)
+  rescue StandardError => e
+		helper.do_error(window,e.message)
+	end
 end
 
 init_config_mi = Gtk::MenuItem.new "Initialise configuration file"
@@ -186,11 +179,7 @@ end
 
 init_log_mi = Gtk::MenuItem.new "Initialise logfile"
 init_log_mi.signal_connect "activate" do
-  if helper.do_yn(window,'OK to reset logfile?')
-    f = File.open(LOGFILE,'w')
-    f.close
-    helper.do_info(window,"Configuration file #{LOGFILE} set to zero length.")
-  end
+	helper.initialise_config(window,'log',LOGFILE)
 end
 
 logs_menu.append logfile_mi

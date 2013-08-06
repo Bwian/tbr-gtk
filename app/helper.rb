@@ -56,12 +56,13 @@ class Helper
     begin   	
       ParseFiles.map_services(groups,services,fname)
       FileUtils.cp(fname,services_path)
+      LogIt.instance.info("Services configuration file installed from #{fname}")
     rescue Errno::ENOENT
-      raise IOError, "Services configuration file #{services_path} not found."
+      raise IOError, "Services configuration #{services_path} not found."
     end
     
-    raise ArgumentError("Services file invalid or empty.  #{fname} not installed as services.csv") if services.size == 0
-  end
+    raise ArgumentError, "Services file invalid or empty.  #{fname} not installed as services.csv" if services.size == 0
+  end 
   
   def yn(prompt,default)
     ans = 'x'
@@ -75,6 +76,19 @@ class Helper
   end
   
   # Dialog helpers
+  
+  def csv_filters(chooser)
+    filter1 = Gtk::FileFilter.new
+    filter1.name = "CSV Files"
+    filter1.add_pattern('*.csv')
+    filter1.add_pattern('*.CSV')
+    chooser.add_filter(filter1) # 1st added will be the default
+
+    filter2 = Gtk::FileFilter.new
+    filter2.name = "All Files"
+    filter2.add_pattern('*')
+    chooser.add_filter(filter2)
+  end
   
   def do_info(window,message)
     dialog = Gtk::MessageDialog.new(window, 
@@ -208,6 +222,29 @@ class Helper
     dialog.destroy
   end
   
+  def do_import_services(window)
+    dialog = Gtk::FileChooserDialog.new("Select new services File",
+                                         window,
+                                         Gtk::FileChooser::ACTION_OPEN,
+                                         nil,
+                                         [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
+                                         [Gtk::Stock::OPEN, Gtk::Dialog::RESPONSE_ACCEPT])
+
+    dialog.set_current_folder(base_directory)
+    csv_filters(dialog)
+    
+    if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
+      begin
+        import_services(dialog.filename)
+      ensure
+        dialog.destroy  # pass through all exceptions but close dialog
+      end
+    else
+      dialog.destroy 
+    end
+    
+  end
+  
   def do_about(window)
     about = Gtk::AboutDialog.new
     about.set_program_name "Telstra Bill Reporting"
@@ -223,7 +260,7 @@ class Helper
   def initialise_config(window,type,filename)
     if do_yn(window,"OK to overwrite #{type} file?")
       init_config(type,filename)
-      do_info(window,message)
+      do_info(window,"#{type.capitalize} file #{filename} set to zero length.")
     end
   end
   
