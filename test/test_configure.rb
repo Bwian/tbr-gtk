@@ -14,10 +14,13 @@ class TestConfigure < MiniTest::Test
   def test_accessors      
     assert_equal('./DATA',@config.data)
     assert_equal('./DATA/archive',@config.archive)
+    assert_equal('./config', @config.services)
     @config.data = 'data'
     assert_equal('data',@config.data)
     @config.archive = 'archive'
-    assert_equal('archive',@config.archive)   
+    assert_equal('archive',@config.archive)
+    @config.services = 'services'
+    assert_equal('services',@config.services)   
   end
   
 	def test_singleton
@@ -47,7 +50,7 @@ class TestConfigure < MiniTest::Test
     assert(@config.changed?,'After change')
     @config.update
     refute(@config.changed?,'After update')
-    assert_equal(57,File.size(newfile))
+    assert_equal(79,File.size(newfile))
     FileUtils.rm_rf(newfile)
   end
   

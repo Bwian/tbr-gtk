@@ -140,8 +140,7 @@ end
 import_services_mi = Gtk::MenuItem.new "Import services file"
 import_services_mi.signal_connect "activate" do
 	begin
-		helper.do_is(window)
-		# helper.do_import_services(window)
+		helper.do_import_services(window)
   rescue StandardError => e
 		helper.do_error(window,e.message)
 	end

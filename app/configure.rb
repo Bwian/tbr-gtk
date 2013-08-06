@@ -12,7 +12,7 @@ class Configure
   def update
     file = File.open(@filename,'w')
     @config.each_pair do |key,value|
-      file.write(sprintf("%-15s:%s\n",key,value))
+      file.write(sprintf("%-15s%s\n","#{key}:",value))
     end
     file.close
     @clone = @config.clone
@@ -41,7 +41,11 @@ class Configure
       log.warn("Syntax error in configuration file '#{@filename}'. Using default configuration.")
     end
     
-    @config = {:data => './data', :archive => './data/archive'} unless @config
+    @config = {
+      :data     => './data', 
+      :archive  => './data/archive',
+      :services => './config' 
+    } unless @config
     
     @config.each_pair do |key,value|
       self.class.send(:define_method, key) { @config[key] }

@@ -30,7 +30,7 @@ class Helper
   def config_path
     "#{base_directory}/config/config.yaml"
   end
-  
+    
   def bill_path
     path = Dir["#{Configure.instance.data}/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
     path.nil? || path.empty? ? Configure.instance.data : path  
@@ -230,7 +230,7 @@ class Helper
                                          [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
                                          [Gtk::Stock::OPEN, Gtk::Dialog::RESPONSE_ACCEPT])
 
-    dialog.set_current_folder(base_directory)
+    dialog.set_current_folder(Configure.instance.services)
     csv_filters(dialog)
     
     if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
