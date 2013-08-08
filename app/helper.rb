@@ -11,16 +11,20 @@ class Helper
     './logs'
   ]
   
+  def initialize
+    @config = Configure.instance
+  end
+  
   def check_directory_structure
     DIRECTORY_STRUCTURE.each do |dir|
       return false unless Dir.exists?(dir)
     end 
-    Dir.exists?(Configure.instance.archive) 
+    Dir.exists?(@config.archive) 
   end
   
   def fix_directory_structure
     build_directory(DIRECTORY_STRUCTURE)
-    build_directory([Configure.instance.archive])
+    build_directory([@config.archive])
   end
   
   def services_path
@@ -32,8 +36,8 @@ class Helper
   end
     
   def bill_path
-    path = Dir["#{Configure.instance.data}/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
-    path.nil? || path.empty? ? Configure.instance.data : path  
+    path = Dir["#{@config.data}/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
+    path.nil? || path.empty? ? @config.data : path  
   end
   
   def base_directory
@@ -45,7 +49,7 @@ class Helper
   def init_config(type,filename)
     f = File.open(filename,'w')
     f.close
-		Configure.instance.file = filename
+		@config.file = filename
     message = "#{type.capitalize} file #{filename} initialised."
     LogIt.instance.info(message)
   end
@@ -230,7 +234,7 @@ class Helper
                                          [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
                                          [Gtk::Stock::OPEN, Gtk::Dialog::RESPONSE_ACCEPT])
 
-    dialog.set_current_folder(Configure.instance.services)
+    dialog.set_current_folder(@config.services)
     csv_filters(dialog)
     
     if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
@@ -243,6 +247,49 @@ class Helper
       dialog.destroy 
     end
     
+  end
+  
+  def do_edit_config(window)
+    dialog = Gtk::Dialog.new('Edit Configuration',
+                             window,
+                             Gtk::Dialog::MODAL,
+                             [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
+                             [Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT])
+                             
+    @config.each do |key,value|
+      input_label = Gtk::Label.new
+      input_label.text = sprintf("%15s","#{key.capitalize}:")
+    
+      input = Gtk::Entry.new
+      input.width_chars = 50
+      input.text = value
+      input.signal_connect('focus_out_event') do |w|   
+        @config.send("#{key}=",input.text)
+        input.select_region(0,0)
+      end
+                             
+      chooser = Gtk::FileChooserButton.new("Select a directory", Gtk::FileChooser::ACTION_SELECT_FOLDER)
+      chooser.current_folder = value
+      chooser.signal_connect('selection_changed') do |w|
+        input.text = chooser.filename
+        @config.send("#{key}=",input.text)
+      end
+      
+      hbox = Gtk::HBox.new(false, 5)
+      hbox.pack_start(input_label,false,false,5)
+      hbox.pack_start_defaults(input)
+      hbox.pack_start(chooser,false,false,5)
+      dialog.vbox.pack_start(hbox,false,false,5)
+    end
+      
+    dialog.show_all
+    if dialog.run == Gtk::Dialog::RESPONSE_ACCEPT
+      @config.update
+    else
+      @config.reset
+    end
+    puts @config.inspect
+    dialog.destroy
   end
   
   def do_about(window)

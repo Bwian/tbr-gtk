@@ -61,6 +61,26 @@ class TestConfigure < MiniTest::Test
     assert_equal('./extra/extra',@config.extra)
   end
   
+  def test_each
+    test = {
+      'data'     => './data', 
+      'archive'  => './data/archive',
+      'services' => './config' 
+    } 
+      
+    @config.each do |key,value|
+      test.delete(key)
+    end
+    
+    assert_equal(0,test.size)
+  end
+  
+  def test_reset
+    @config.data = './something/new'
+    @config.reset
+    assert_equal('./DATA',@config.data)
+  end
+  
   private
   
   def invalid_file(file)

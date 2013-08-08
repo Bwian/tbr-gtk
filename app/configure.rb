@@ -11,7 +11,7 @@ class Configure
   
   def update
     file = File.open(@filename,'w')
-    @config.each_pair do |key,value|
+    @config.each do |key,value|
       file.write(sprintf("%-15s%s\n","#{key}:",value))
     end
     file.close
@@ -21,6 +21,14 @@ class Configure
   def changed?
     !@config.eql?(@clone)
   end
+  
+  def reset
+    @config = @clone.clone
+  end
+  
+	def each(&blk)
+  	@config.each(&blk)
+  end 
   
   private
   
@@ -33,10 +41,10 @@ class Configure
     log = LogIt.instance
     @config = nil
     begin
-      @filename = filename.nil? || filename.empty? ? './config.haml' : filename
+      @filename = filename.nil? || filename.empty? ? '' : filename
       @config = YAML.load_file(@filename)
     rescue Errno::ENOENT
-      log.warn("Missing configuration file '#{@filename}'. Using default configuration.")
+      log.warn("Missing configuration file '#{@filename}'. Using default configuration.") unless @filename.empty?
     rescue Psych::SyntaxError
       log.warn("Syntax error in configuration file '#{@filename}'. Using default configuration.")
     end
@@ -47,7 +55,7 @@ class Configure
       :services => './config' 
     } unless @config
     
-    @config.each_pair do |key,value|
+    @config.each do |key,value|
       self.class.send(:define_method, key) { @config[key] }
       self.class.send(:define_method, "#{key}=") {|param| @config[key] = param }   
     end

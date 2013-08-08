@@ -14,10 +14,6 @@ def file_changed(chosen, field)
   field.select_region(0,0)
 end
 
-def dummy_menu(helper,window)
-  helper.do_info(window,'Menu option not yet implemented')
-end
-
 helper = Helper.new
 services_file	= helper.services_path
 
@@ -149,12 +145,13 @@ end
 init_config_mi = Gtk::MenuItem.new "Initialise configuration file"
 init_config_mi.signal_connect "activate" do
   helper.initialise_config(window,'configuration',config_file)
+	bill_file.text = File.realdirpath(helper.bill_path)
 end
 
 configfile_mi = Gtk::MenuItem.new "Edit configuration file"
 configfile_mi.signal_connect "activate" do
-  helper.do_info(window,"Edit configuration file not yet implemented")
-	# helper.do_edit_config(window,'Edit Configuration File', config_file)
+	helper.do_edit_config(window)
+	bill_file.text = File.realdirpath(helper.bill_path)
 end
 
 configuration_separator = Gtk::MenuItem.new nil
