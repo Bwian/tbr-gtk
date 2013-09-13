@@ -295,7 +295,7 @@ class Helper
   def do_about(window)
     about = Gtk::AboutDialog.new
     about.set_program_name "Telstra Bill Reporting"
-    about.set_version "1.0"
+    about.set_version "1.1"
     about.set_copyright "(c) Pyrrho Pty Ltd - 2013"
     about.set_comments "Telstra Bill Reporting parses Telstra billing files and produces individual and summary service reports.\n\nPlease note this version supports Telstra On Line Billing Service technical specification version 6.4\n"
     # about.set_website "www.pyrrho.com.au"

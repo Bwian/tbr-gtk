@@ -103,5 +103,14 @@ Issues
   usually be accessed.
 - This readme file is the only documentation available.  Access to it from the 
   Help menu will be provided in a future version. 
-  
+
+Release Notes
+-------------
+Version 1.1
+- Commas now allowed in service descriptions as long as description is 
+  enclosed in "".  This is done automatically by Excel when using 'Save as'
+  csv.
+- Non-data rows ignored in services configuration file.  This relies on
+  valid services containing at least one character in the range 0-9.
+- Empty rows ignored in services configuration file.
   
