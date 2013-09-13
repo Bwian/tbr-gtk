@@ -9,7 +9,9 @@ class Groups
   end
   
   def group(name)
-  	if !@groups.include?(name)
+  	return nil if name.nil? or name.empty?
+    
+    if !@groups.include?(name)
   		@groups[name] = Group.new(name) 
   	end
   	@groups[name]
@@ -20,6 +22,6 @@ class Groups
   end 
   
   def each(&blk)
-  	Hash[@groups.sort].each_value(&blk)
+    Hash[@groups.sort].each_value(&blk)
   end 
 end

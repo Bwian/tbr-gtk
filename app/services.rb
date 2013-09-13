@@ -9,7 +9,9 @@ class Services
   end
   
   def service(service_number)
-  	if !@services.include?(service_number)
+  	return nil if service_number.nil? or service_number.empty?
+    
+    if !@services.include?(service_number)
   		@services[service_number] = Service.new(service_number,nil,nil) 
   	end
   	@services[service_number]

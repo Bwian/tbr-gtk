@@ -40,8 +40,9 @@ class TestParseFiles < MiniTest::Test
 	end
 	
 	def test_valid_fields
-		assert(!ParseFiles.send(:valid_fields,''.split(',')))
+    assert(!ParseFiles.send(:valid_fields,''.split(',')))
 		assert(!ParseFiles.send(:valid_fields,'A,B,C'.split(',')))
 		assert(ParseFiles.send(:valid_fields,'A,B,C,D'.split(',')))
+    assert(!ParseFiles.send(:valid_fields,[nil,nil,nil,nil,nil])) # ',,,,,'.split(',') doesn't work
 	end
 end

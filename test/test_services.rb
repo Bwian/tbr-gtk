@@ -20,6 +20,16 @@ class TestServices < MiniTest::Test
 		assert_equal(2,@services.size)	
 	end
 	
+  def test_add_empty_services
+		assert_equal(0,@services.size)
+		
+    @services.service('')
+    assert_equal(0,@services.size)
+    
+    @services.service(nil)
+    assert_equal(0,@services.size)
+  end
+  
 	def test_each
 		load_services
 		

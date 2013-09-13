@@ -19,6 +19,16 @@ class TestGroups < MiniTest::Test
 		assert_equal(2,@groups.size)
 	end
 	
+  def test_add_blank_groups
+		assert_equal(0,@groups.size)
+		
+    @groups.group('')
+    assert_equal(0,@groups.size)
+    
+    @groups.group(nil)
+    assert_equal(0,@groups.size)
+  end
+  
 	def test_size
 		@groups.group('Brian')
 		@groups.group('Frank')
