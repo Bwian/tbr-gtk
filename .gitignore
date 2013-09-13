@@ -15,6 +15,7 @@
 /logs/*.log
 /tmp
 .DS_Store
+/data/bills.csv
 
 *.pdf
 /data/archive/*
