@@ -1,7 +1,7 @@
 Telstra Billing Reporter
 ------------------------
 
-Version 1.0
+Version 1.1
 
 This program parses monthly billing files produced in accordance with Telstra 
 On Line Billing Service technical specfication version 6.4 and produces 
@@ -104,8 +104,6 @@ Issues
   in a future version.  This would allow easy selection of billing files while
   allowing report files to be output to the directory from which they will 
   usually be accessed.
-- This readme file is the only documentation available.  Access to it from the 
-  Help menu will be provided in a future version. 
 
 Release Notes
 -------------
@@ -116,4 +114,5 @@ Version 1.1
 - Non-data rows ignored in services configuration file.  This relies on
   valid services containing at least one character in the range 0-9.
 - Empty rows ignored in services configuration file.
+- Readme documentation (this file) now displayed from Help menu.
   
