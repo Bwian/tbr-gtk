@@ -191,7 +191,13 @@ about_mi.signal_connect "activate" do
   helper.do_about(window)
 end
 
+readme_mi = Gtk::MenuItem.new "Display readme file"
+readme_mi.signal_connect "activate" do
+  helper.do_log_review(window,'Display readme file',File.expand_path('./readme.txt'))
+end
+
 help_menu.append about_mi
+help_menu.append readme_mi
 
 mb = Gtk::MenuBar.new
 mb.append file_mi

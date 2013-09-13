@@ -92,6 +92,9 @@ Menu Options
 - Help > About
   Displays copyright and version information
   
+- Help > Display readme file
+  Displays this file
+
 Issues
 ------
 - The program does not display a flash screen during initialisation and can 
