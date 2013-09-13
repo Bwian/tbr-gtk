@@ -1,0 +1,9 @@
+rm -rf ./telstra
+mkdir telstra
+cp -r ../app telstra
+cp -r ../images telstra
+cd telstra
+mkdir ./config
+mkdir ./data
+mkdir ./data/archive
+mkdir ./logs
