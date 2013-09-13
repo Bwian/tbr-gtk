@@ -19,3 +19,7 @@
 *.pdf
 /data/archive/*
 /coverage/*
+
+# Ignore build files
+/build/telstra
+
