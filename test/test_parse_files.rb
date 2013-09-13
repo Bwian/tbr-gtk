@@ -42,7 +42,8 @@ class TestParseFiles < MiniTest::Test
 	def test_valid_fields
     assert(!ParseFiles.send(:valid_fields,[]))
 		assert(!ParseFiles.send(:valid_fields,['A','B','C']))
-		assert(ParseFiles.send(:valid_fields,['A','B','C','D']))
-    assert(!ParseFiles.send(:valid_fields,[nil,nil,nil,nil,nil])) # ',,,,,'.split(',') doesn't work
+		assert(ParseFiles.send(:valid_fields,['A0','B','C','D']))
+    assert(!ParseFiles.send(:valid_fields,[nil,nil,nil,nil,nil]))
+    assert(!ParseFiles.send(:valid_fields,['Heading Line','Col 2','Col 3','Col 4'])) 
 	end
 end
