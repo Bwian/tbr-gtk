@@ -1,1 +1,29 @@
-grep TODO */*.rb*
+#!/usr/bin/env ruby
+
+FILE = 35
+LINE = 80
+
+output = IO.popen 'grep -n TODO */*.rb*'
+puts "\nTODOs\n"
+puts '-----'
+
+output.each do |line|
+  x = line.split 'TODO'
+  f = x[0].split '#'
+  file = f[0].strip
+  words = x[1].split ' '
+  l = ''
+  dash = '-'
+  words.each do |w|
+    if l.size + w.size > LINE - FILE then
+      printf("%-#{FILE}.#{FILE}s %s %s\n", file, dash, l)
+      file = ''
+      dash = ' '
+      l = ''
+    end
+    l = l + w + ' '
+  end
+  printf("%-#{FILE}.#{FILE}s %s %s\n", file, dash, l)
+end
+puts
+
