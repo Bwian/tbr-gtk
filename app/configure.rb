@@ -50,7 +50,8 @@ class Configure
     end
     
     @config = {
-      :data     => './data', 
+      :input    => './data', 
+      :output   => './data', 
       :archive  => './data/archive',
       :services => './config' 
     } unless @config

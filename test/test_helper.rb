@@ -46,7 +46,7 @@ class TestHelper < MiniTest::Test
   end
   
   def test_fix_archive
-    @config.data = './data'
+    @config.output = './data'
     @config.archive = './test/archive'
     FileUtils.rm_rf(@config.archive)
     @helper.fix_directory_structure
@@ -87,9 +87,9 @@ class TestHelper < MiniTest::Test
 		FileUtils.cp('./test/data/config.yaml',fname)
     @config.file = fname
     
-    assert_equal('./DATA',@config.data)
+    assert_equal('./DATA',@config.input)
     @helper.init_config('test',fname)	
-    assert_equal('./data',@config.data)	
+    assert_equal('./data',@config.input)	
 		assert(File.size(fname)== 0)
     
     FileUtils.rm_rf(fname)

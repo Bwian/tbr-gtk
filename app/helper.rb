@@ -36,8 +36,8 @@ class Helper
   end
     
   def bill_path
-    path = Dir["#{@config.data}/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
-    path.nil? || path.empty? ? @config.data : path  
+    path = Dir["#{@config.input}/*.{csv,CSV}"].sort_by {|f| File.mtime(f)}.last
+    path.nil? || path.empty? ? @config.input : path  
   end
   
   def base_directory
@@ -288,7 +288,7 @@ class Helper
     else
       @config.reset
     end
-    puts @config.inspect
+
     dialog.destroy
   end
   

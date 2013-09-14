@@ -57,5 +57,5 @@ class TestCreateFiles < MiniTest::Test
     end
   end
 	
-	# TODO: test file creation methods
+	# TODO test file creation methods cos this class doesn't really do it properly
 end

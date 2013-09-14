@@ -33,7 +33,7 @@ window.signal_connect('destroy') { Gtk.main_quit }
 window.resize(600,400)
 
 chooser = Gtk::FileChooserButton.new("Select a Billing File", Gtk::FileChooser::ACTION_OPEN)
-chooser.current_folder = "#{config.data}"
+chooser.current_folder = "#{config.input}"
 helper.csv_filters(chooser)
 
 input_label = Gtk::Label.new

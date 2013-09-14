@@ -12,11 +12,14 @@ class TestConfigure < MiniTest::Test
   end
   
   def test_accessors      
-    assert_equal('./DATA',@config.data)
+    assert_equal('./DATA',@config.input)
+    assert_equal('./DATA',@config.output)
     assert_equal('./DATA/archive',@config.archive)
     assert_equal('./config', @config.services)
-    @config.data = 'data'
-    assert_equal('data',@config.data)
+    @config.input = 'input'
+    assert_equal('input',@config.input)
+    @config.output = 'output'
+    assert_equal('output',@config.output)
     @config.archive = 'archive'
     assert_equal('archive',@config.archive)
     @config.services = 'services'
@@ -46,24 +49,25 @@ class TestConfigure < MiniTest::Test
     FileUtils.rm_rf(newfile)
     @config.file = newfile
     refute(@config.changed?,'Before change')
-    @config.data = './datanew'
+    @config.input = './datanew'
     assert(@config.changed?,'After change')
     @config.update
     refute(@config.changed?,'After update')
-    assert_equal(79,File.size(newfile))
+    assert_equal(101,File.size(newfile))
     FileUtils.rm_rf(newfile)
   end
   
   def test_extra
     @config.file = './test/data/extra.yaml'
-    assert_equal('./extra',@config.data)
+    assert_equal('./extra',@config.input)
     assert_nil(@config.archive)
     assert_equal('./extra/extra',@config.extra)
   end
   
   def test_each
     test = {
-      'data'     => './data', 
+      'input'    => './input',
+      'output'   => './output',
       'archive'  => './data/archive',
       'services' => './config' 
     } 
@@ -76,16 +80,16 @@ class TestConfigure < MiniTest::Test
   end
   
   def test_reset
-    @config.data = './something/new'
+    @config.input = './something/new'
     @config.reset
-    assert_equal('./DATA',@config.data)
+    assert_equal('./DATA',@config.input)
   end
   
   private
   
   def invalid_file(file)
     @config.file = file
-    assert_equal('./data',@config.data)
+    assert_equal('./data',@config.input)
     assert_equal('./data/archive',@config.archive)
   end
 end

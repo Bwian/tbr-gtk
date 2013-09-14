@@ -19,7 +19,7 @@ class CreateFiles
 	
   def initialize(invoice_date,replace)
     @invoice_month  = Time.parse(invoice_date).strftime('%B %Y')
-  	@dir_root       = "#{Configure.instance.data}/#{invoice_date[0..5]}"	
+  	@dir_root       = "#{Configure.instance.output}/#{invoice_date[0..5]}"	
   	@dir_summaries  = "#{@dir_root}/summaries"
   	@dir_details    = "#{@dir_root}/details"
     

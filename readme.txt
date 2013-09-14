@@ -1,7 +1,7 @@
 Telstra Billing Reporter
 ------------------------
 
-Version 1.1
+Version 1.1 - see end of file for release notes.
 
 This program parses monthly billing files produced in accordance with Telstra 
 On Line Billing Service technical specfication version 6.4 and produces 
@@ -100,10 +100,6 @@ Issues
 - The program does not display a flash screen during initialisation and can 
   take a minute or more to start up.  Be patient - it will get there 
   eventually! 
-- The "Data" configuration variable should probably be split into two variables
-  in a future version.  This would allow easy selection of billing files while
-  allowing report files to be output to the directory from which they will 
-  usually be accessed.
 
 Release Notes
 -------------
@@ -115,4 +111,7 @@ Version 1.1
   valid services containing at least one character in the range 0-9.
 - Empty rows ignored in services configuration file.
 - Readme documentation (this file) now displayed from Help menu.
+- Split Data configuration variable into two - Input and Output.  Input is
+  used as the search dirctory for the Telstra billing file.  Output is the base
+  directory into which the report files are written.
   

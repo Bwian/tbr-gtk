@@ -1,2 +1,2 @@
-data:      ./test/data
+input:     ./test/data
 archive:   ./test/data/archive

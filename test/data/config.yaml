@@ -1,3 +1,4 @@
-data:      ./DATA
+input:     ./DATA
+output:    ./DATA
 archive:   ./DATA/archive
 services:  ./config
