@@ -2,6 +2,7 @@ rm -rf ./telstra
 mkdir telstra
 cp -r ../app telstra
 cp -r ../images telstra
+cp readme.txt telstra
 cd telstra
 mkdir ./config
 mkdir ./data
