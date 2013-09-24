@@ -1,9 +1,14 @@
 rm -rf ./telstra
 mkdir telstra
+cp buildwin.bat telstra
+cp TBRbuild.iss telstra
 cp -r ../app telstra
-cp -r ../images telstra
-cp readme.txt telstra
 cd telstra
+mkdir ./logs
+mkdir ./tbr
+cp -r ../../images tbr
+cp ../../readme.txt tbr
+cd tbr
 mkdir ./config
 mkdir ./data
 mkdir ./data/archive
