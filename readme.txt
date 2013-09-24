@@ -99,7 +99,8 @@ Issues
 ------
 - The program does not display a flash screen during initialisation and can 
   take a minute or more to start up.  Be patient - it will get there 
-  eventually! 
+  eventually!
+- File browser doesn't find network files under Windows XP
 
 Release Notes
 -------------
