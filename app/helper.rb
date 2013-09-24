@@ -255,11 +255,13 @@ class Helper
                              Gtk::Dialog::MODAL,
                              [Gtk::Stock::CANCEL, Gtk::Dialog::RESPONSE_CANCEL],
                              [Gtk::Stock::OK, Gtk::Dialog::RESPONSE_ACCEPT])
-                             
+    
     @config.each do |key,value|
       input_label = Gtk::Label.new
-      input_label.text = sprintf("%15s","#{key.capitalize}:")
-    
+      input_label.text = sprintf("%s","#{key.capitalize}:")
+      input_label.width_chars = 10
+      input_label.xalign = 1
+      
       input = Gtk::Entry.new
       input.width_chars = 50
       input.text = value
