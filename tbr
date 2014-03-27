@@ -1,1 +1,3 @@
+# Start the GUI app
+rm -r ./data/201306
 ruby app/tbr.rbw
