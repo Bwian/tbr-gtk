@@ -49,7 +49,7 @@ class Helper
   def init_config(type,filename)
     f = File.open(filename,'w')
     f.close
-		@config.file = filename
+    @config.file = filename unless type == 'services'
     message = "#{type.capitalize} file #{filename} initialised."
     LogIt.instance.info(message)
   end
