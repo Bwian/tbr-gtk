@@ -3,6 +3,7 @@ mkdir telstra
 cp buildtbr.bat telstra
 cp buildsetup.bat telstra
 cp TBRbuild.iss telstra
+cp ../Gemfile telstra
 cp -r ../app telstra
 cd telstra
 mkdir ./logs
