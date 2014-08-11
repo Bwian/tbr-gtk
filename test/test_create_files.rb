@@ -41,10 +41,11 @@ class TestCreateFiles < MiniTest::Test
   
   def test_archive
     FileUtils.rm_rf('./data/bills*.csv')
+    FileUtils.rm_rf('./data/archive/bills*.csv')
     FileUtils.cp('./test/data/bills.csv', './data/bills.csv')
     CreateFiles.archive('./data/bills.csv')
-    assert(Dir.glob('./data/bills*.csv').empty?)  
-    assert(!Dir.glob('./data/archive/bills*.csv').empty?)  
+    assert(Dir.glob('./data/bills*.csv').empty?,'./data should be empty')  
+    refute(Dir.glob('./data/archive/bills*.csv').empty?,'./data/archive should not be empty')  
     FileUtils.rm_rf('./data/archive/bills*.csv')   
   end
   

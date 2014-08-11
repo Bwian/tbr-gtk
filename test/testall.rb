@@ -1,6 +1,6 @@
 require 'simplecov'
 require_relative '../app/log_it'
-# require 'debugger'; debugger
+require 'pry'
 
 SimpleCov.start
 @@test_dialogs = false  # Set to true to test gui and console output

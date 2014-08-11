@@ -1,4 +1,6 @@
+gem 'prawn','=0.15.0'
 require 'prawn'
+require 'prawn/table'
 require 'prawn/measurement_extensions'
 require 'time'
 require 'fileutils'
@@ -48,7 +50,7 @@ class CreateFiles
   end
   
   def self.archive(bill_file)
-    to_file = "#{Configure.instance.archive}/#{Time.now.strftime('%Y%m%d.%H%M%S.csv')}"
+    to_file = "#{Configure.instance.archive}/#{File.basename(bill_file,'.csv')}#{Time.now.strftime('%Y%m%d.%H%M%S.csv')}"
     
     begin
       FileUtils.mv(bill_file,to_file)
