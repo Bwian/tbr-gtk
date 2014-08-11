@@ -8,7 +8,7 @@ cd telstra
 mkdir ./logs
 mkdir ./tbr
 cp -r ../../images tbr
-cp ../../readme.txt tbr
+cp ../readme.txt tbr
 cd tbr
 mkdir ./config
 mkdir ./data

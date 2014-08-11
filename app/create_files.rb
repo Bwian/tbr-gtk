@@ -1,6 +1,5 @@
 gem 'prawn','=0.15.0'
 require 'prawn'
-require 'prawn/table'
 require 'prawn/measurement_extensions'
 require 'time'
 require 'fileutils'

@@ -1,0 +1,40 @@
+== TBR - Telstra Billing Reporter
+
+This program parses monthly billing files produced in accordance with Telstra On Line Billing Service technical specfication version 6.4 and produces detailed and summary billing reports in PDF format as deterimined by a user defined configuration file.  Minor updates to the Telstra specification are unlikely cause any problems.
+
+Although technically a public project, TBR has been produced for a specific not-for-profit organisation and is unlikely to be useful in other contexts. However, if any of the code is useful to anyone, feel free to use it!
+
+More information on TBR's use can be found in <em>build/readme.txt</em>.  This file also contains release notes and can be accessed from the TBR's help function.
+
+=== Dependencies
+TBR make use of a couple of third-party gems to manage the user interface and PDF production:
+
+==== GUI
+TBR uses the GTK cross-platform GUI toolkit via the <em>gtk2</em> gem to render the user interface.  Although the latest version of this gem supports GTK 2.2, TBR has only been tested against version 2.0.
+
+==== PDF
+PDF production is handled via the <em>prawn</em> gem.  While later versions of this gem are available, version 0.15 is still being used due to the following issues:
+* grouping was disabled in version 1.0.0 due to corrupted documents when a page boundary was
+crossed.  This can be addressed using the prawn-grouping gem until a better solution is found. (https://github.com/prawnpdf/prawn/issues/678)
+* table management was removed from prawn in version 1.2 and moved to the prawn-table gem.  Require statements currently don't find version 0.1.0 of this gem.
+
+==== Windows Executable
+This <em>ocra</em> gem creates a bundled Windows executable which contains the ruby interpreter, the TBR application and dependent gems.  There must be a 
+
+==== Windows Installer
+Inno Setup (http://www.jrsoftware.org/isinfo.php) is used to build a Windows installer.
+
+=== Deployment
+The following describes creation of a windows installer.  Installation on OSX or Linux has not been documented but should only require packaging up the <em>tbr</em> directory, then running the <em>tbr</em> script from it.
+
+To build a Windows installer:
+* From the build directory, running <em>go</em>
+* copy the resulting <em>telstra</em> directory structure to the Windows machine.
+
+On the Windows machine:
+* Run <em>bundle install</em> to update third-party gems.
+* Run buildtbr.bat to build the executable, <em>tbr.exe</em>
+* Run buildsetup.bat to create a windows installer
+
+
+

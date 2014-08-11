@@ -4,6 +4,14 @@ source 'https://rubygems.org'
 gem 'pry'
 gem 'pry-nav'
 
+# testing 
+gem 'minitest'
+gem 'simplecov'
+gem 'simplecov-html'
+
 # pdf management
-gem 'prawn','~> 0.15.0'
-gem 'prawn-grouping'
+gem 'prawn','~>0.15.0'
+
+# GUI
+gem 'gtk2','~>2.0.2'
+
