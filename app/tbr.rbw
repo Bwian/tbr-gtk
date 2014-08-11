@@ -144,7 +144,7 @@ end
 
 init_config_mi = Gtk::MenuItem.new "Initialise configuration file"
 init_config_mi.signal_connect "activate" do
-  helper.initialise_config(window,'configuration',config_file)
+  config.file = '' if helper.initialise_config(window,'configuration',config_file)
 	bill_file.text = File.realdirpath(helper.bill_path)
 end
 
