@@ -1,18 +1,20 @@
-== TBR - Telstra Billing Reporter
+== TBR-GTK - Telstra Billing Reporter
+
+Note that this project is no longer maintained following porting and dependency problems with Windows 7/8.  Originally named TBR, this name is now used for the gem which encapsulates the business logic.  Should TBR-GTK be reactivated, it should be modified to use the tbr gem.
 
 This program parses monthly billing files produced in accordance with Telstra On Line Billing Service technical specfication version 6.4 and produces detailed and summary billing reports in PDF format as deterimined by a user defined configuration file.  Minor updates to the Telstra specification are unlikely cause any problems.
 
 Although technically a public project, TBR has been produced for a specific not-for-profit organisation and is unlikely to be useful in other contexts. However, if any of the code is useful to anyone, feel free to use it!
 
-More information on TBR's use can be found in <em>build/readme.txt</em>.  This file also contains release notes and can be accessed from the TBR's help function.
+More information on TBR-GTK's use can be found in <em>build/readme.txt</em>.  This file also contains release notes and can be accessed from the TBR's help function.
 
 === Dependencies
 Ruby 2.0.  Should work OK on later releases but the <em>ocra</em> gem is currently only certified against 2.0.
 
-TBR make use of a couple of third-party gems to manage the user interface and PDF production:
+TBR-GTK make use of a couple of third-party gems to manage the user interface and PDF production:
 
 ==== GUI
-TBR uses the GTK cross-platform GUI toolkit via the <em>gtk2</em> gem to render the user interface.  Although the latest version of this gem supports GTK 2.2, TBR has only been tested against version 2.0.
+TBR-GTK uses the GTK cross-platform GUI toolkit via the <em>gtk2</em> gem to render the user interface.  Although the latest version of this gem supports GTK 2.2, TBR has only been tested against version 2.0.
 
 ==== PDF
 PDF production is handled via the <em>prawn</em> gem.  While later versions of this gem are available, version 0.15 is still being used due to the following issues:
@@ -20,10 +22,10 @@ PDF production is handled via the <em>prawn</em> gem.  While later versions of t
 * table management was removed from prawn in version 1.2 and moved to the prawn-table gem.  Require statements currently don't find version 0.1.0 of this gem.
 
 ==== Windows Executable
-This <em>ocra</em> gem creates a bundled Windows executable which contains the ruby interpreter, the TBR application and dependent gems.  The windows platform must include a version of ruby compatible with <em>ocra</em>, the <em>rubygems</em> package manager and preferably the <em>bundle</em> gem.
+This <em>ocra</em> gem creates a bundled Windows executable which contains the ruby interpreter, the TBR-GTK application and dependent gems.  The windows platform must include a version of ruby compatible with <em>ocra</em>, the <em>rubygems</em> package manager and preferably the <em>bundle</em> gem.
 
 ==== Windows Installer
-Inno Setup (http://www.jrsoftware.org/isinfo.php) is used to build a Windows installer.  The TBR release includes a configuration file for Inno Setup.
+Inno Setup (http://www.jrsoftware.org/isinfo.php) is used to build a Windows installer.  The TBR-GTK release includes a configuration file for Inno Setup.
 
 === Deployment
 The following describes creation of a windows installer.  Installation on OSX or Linux has not been documented but should only require packaging up the <em>tbr</em> directory, then running the <em>tbr</em> script from it.
