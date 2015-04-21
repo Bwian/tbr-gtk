@@ -1,6 +1,6 @@
 == TBR_GTK - Telstra Billing Reporter
 
-Note that this project is no longer maintained following porting and dependency problems with Windows 7/8.  Originally named TBR, this name is now used for the gem which encapsulates the business logic.  Should the project be reactivated, it should be modified to use the tbr gem.
+Note that this project is no longer maintained following porting and dependency problems with Windows 7/8.  Originally named TBR, this name is now used for the [gem](https://github.com/Bwian/tbr) which encapsulates the business logic.  Should the project be reactivated, it should be modified to use the tbr gem.
 
 This program parses monthly billing files produced in accordance with Telstra On Line Billing Service technical specfication version 6.4 and produces detailed and summary billing reports in PDF format as deterimined by a user defined configuration file.  Minor updates to the Telstra specification are unlikely cause any problems.
 
